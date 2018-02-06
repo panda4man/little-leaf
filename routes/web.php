@@ -2,8 +2,11 @@
 
 Auth::routes();
 Route::view('/', 'welcome');
-Route::get('/home', 'HomeController@index')->name('home');
+
 Route::group(['middleware' => 'auth'], function () {
+    // Dashboard
+    Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
+
     // Company routes
     Route::get('/companies', 'CompaniesController@index');
     Route::get('/companies/{company}/select', ['as' => 'set-company', 'uses' => 'CompaniesController@getSelect']);
@@ -17,7 +20,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/work/week', ['as' => 'work-weekly', 'uses' => 'WorkController@getWeekView']);
     Route::get('/work/day', ['as' => 'work-dayly', 'uses' => 'WorkController@getDayView']);
 
+    // Ajax Routes
     Route::group(['prefix' => 'ajax', 'namespace' => 'Ajax'], function () {
+        Route::get('/companies/{id}', 'CompaniesController@find');
         Route::post('/companies', 'CompaniesController@store');
+        Route::put('/companies/{company}', 'CompaniesController@update');
     });
 });
