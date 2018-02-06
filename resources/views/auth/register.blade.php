@@ -1,79 +1,80 @@
 @extends('layouts.main')
 
 @section('content')
-<v-layout>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-8 col-md-offset-2">
-                <div class="panel panel-default">
-                    <div class="panel-heading">Register</div>
-    
-                    <div class="panel-body">
-                        <form class="form-horizontal" method="POST" action="{{ route('register') }}">
+    <register :form-errors="{{$errors}}" inline-template>
+        <v-layout row align-center>
+            <v-flex xs12 sm10 offset-sm1 md8 offset-md2 lg6 offset-lg3>
+                <v-card>
+                    <v-card-title primary-title>
+                        <div>
+                            <h3 class="headline">Register</h3>
+                        </div>
+                    </v-card-title>
+                    <v-card-text>
+                        <form @submit="validateRegister" id="register-form" method="POST" action="{{ route('register') }}">
                             {{ csrf_field() }}
-    
-                            <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-                                <label for="name" class="col-md-4 control-label">Name</label>
-    
-                                <div class="col-md-6">
-                                    <input id="name" type="text" class="form-control" name="name" value="{{ old('name') }}" required autofocus>
-    
-                                    @if ($errors->has('name'))
-                                        <span class="help-block">
-                                            <strong>{{ $errors->first('name') }}</strong>
-                                        </span>
-                                    @endif
-                                </div>
-                            </div>
-    
-                            <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                                <label for="email" class="col-md-4 control-label">E-Mail Address</label>
-    
-                                <div class="col-md-6">
-                                    <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required>
-    
-                                    @if ($errors->has('email'))
-                                        <span class="help-block">
-                                            <strong>{{ $errors->first('email') }}</strong>
-                                        </span>
-                                    @endif
-                                </div>
-                            </div>
-    
-                            <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-                                <label for="password" class="col-md-4 control-label">Password</label>
-    
-                                <div class="col-md-6">
-                                    <input id="password" type="password" class="form-control" name="password" required>
-    
-                                    @if ($errors->has('password'))
-                                        <span class="help-block">
-                                            <strong>{{ $errors->first('password') }}</strong>
-                                        </span>
-                                    @endif
-                                </div>
-                            </div>
-    
-                            <div class="form-group">
-                                <label for="password-confirm" class="col-md-4 control-label">Confirm Password</label>
-    
-                                <div class="col-md-6">
-                                    <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required>
-                                </div>
-                            </div>
-    
-                            <div class="form-group">
-                                <div class="col-md-6 col-md-offset-4">
-                                    <button type="submit" class="btn btn-primary">
-                                        Register
-                                    </button>
-                                </div>
-                            </div>
+                            <v-layout row wrap>
+                                <v-flex xs12 sm6>
+                                    <v-text-field
+                                        label="First Name"
+                                        name="first_name"
+                                        data-vv-as="first name"
+                                        :error-messages="errors.collect('first_name')"
+                                        v-model="forms.register.firstName"
+                                        v-validate="'required'">
+                                    </v-text-field>
+                                </v-flex>
+                                <v-flex xs12 sm6>
+                                    <v-text-field
+                                            label="Last Name"
+                                            name="last_name"
+                                            data-vv-ass="last name"
+                                            :error-messages="errors.collect('last_name')"
+                                            v-model="forms.register.lastName"
+                                            v-validate="'required'">
+                                    </v-text-field>
+                                </v-flex>
+                            </v-layout>
+                            <v-text-field
+                                type="email"
+                                name="email"
+                                label="Email"
+                                :error-messages="errors.collect('email')"
+                                v-model="forms.register.email"
+                                v-validate="'required|email'">
+                            </v-text-field>
+                            <v-layout row>
+                                <v-flex xs12 sm6>
+                                    <v-text-field
+                                        type="password"
+                                        label="Password"
+                                        name="password"
+                                        :error-messages="errors.collect('password')"
+                                        v-model="forms.register.password"
+                                        v-validate="'required'">
+                                    </v-text-field>
+                                </v-flex>
+                                <v-flex xs12 sm6>
+                                    <v-text-field
+                                        type="password"
+                                        label="Confirm Password"
+                                        name="password_confirmation"
+                                        :error-messages="errors.collect('passwordConfirmation')"
+                                        v-model="forms.register.passwordConfirmation"
+                                        v-validate="'required'">
+                                    </v-text-field>
+                                </v-flex>
+                            </v-layout>
+
+                            <v-layout row>
+                                <v-flex sm12>
+                                    <v-btn :disabled="errors.any()" primary type="submit">Register</v-btn>
+                                </v-flex>
+                            </v-layout>
                         </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</v-layout>
+                    </v-card-text>
+                </v-card>
+            </v-flex>
+        </v-layout>
+    </register>
 @endsection
