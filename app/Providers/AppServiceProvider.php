@@ -2,7 +2,8 @@
 
 namespace App\Providers;
 
-use App\Services\WorkService;
+use App\Searches\WorkSearch;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -14,7 +15,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        Relation::morphMap([
+            'project'     => \App\Models\Project::class,
+            'deliverable' => \App\Models\Deliverable::class,
+        ]);
     }
 
     /**
@@ -28,8 +32,8 @@ class AppServiceProvider extends ServiceProvider
             $this->app->register(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
         }
 
-        $this->app->bind(WorkService::class, function () {
-            return new WorkService();
+        $this->app->bind(WorkSearch::class, function () {
+            return new WorkSearch();
         });
     }
 }
