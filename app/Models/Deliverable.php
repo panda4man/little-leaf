@@ -5,34 +5,26 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Project extends Model
+class Deliverable extends Model
 {
     use SoftDeletes;
 
     /**
      * @var array
      */
-    protected $fillable = ['name', 'due_at', 'completed_at'];
+    protected $fillable = ['name', 'due_at'];
 
     /**
      * @var array
      */
-    protected $dates = ['due_at', 'completed_at'];
+    protected $dates = ['due_at'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function client()
+    public function project()
     {
-        return $this->belongsTo(Client::class);
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function deliverables()
-    {
-        return $this->hasMany(Deliverable::class);
+        return $this->belongsTo(Project::class);
     }
 
     /**

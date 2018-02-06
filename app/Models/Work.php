@@ -12,11 +12,11 @@ class Work extends Model
     protected $fillable = ['description', 'hours'];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
      */
-    public function project()
+    public function workable()
     {
-        return $this->belongsTo(Project::class);
+        return $this->morphTo();
     }
 
     /**
