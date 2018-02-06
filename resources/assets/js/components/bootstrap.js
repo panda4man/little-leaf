@@ -1,2 +1,3 @@
 import './work/bootstrap';
-import './login';
+import './auth/bootstrap';
+import './companies/bootstrap';
