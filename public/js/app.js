@@ -48366,7 +48366,15 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('companies', {
     data: function data() {
         return {
             mCompanies: this.companies,
-            currentCompany: null
+            currentCompany: null,
+            modals: {
+                createModal: false
+            },
+            forms: {
+                newCompany: {
+                    name: null
+                }
+            }
         };
     },
     created: function created() {
@@ -48383,7 +48391,7 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('companies', {
         }
     },
 
-    method: {
+    methods: {
         selectCompany: function selectCompany(id) {
             var _this = this;
 
@@ -48392,6 +48400,12 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('companies', {
                     _this.currentCompany = c;
                 }
             });
+        },
+        openCreateModal: function openCreateModal() {
+            this.modals.createModal = true;
+        },
+        closeCreateModal: function closeCreateModal() {
+            this.modals.createModal = false;
         }
     }
 });
