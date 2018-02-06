@@ -29,7 +29,7 @@ class TaskTransformer extends TransformerAbstract
         return $data;
     }
 
-    public function work($task)
+    public function includeWork($task)
     {
         if(!$task)
             return null;

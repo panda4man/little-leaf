@@ -39,7 +39,7 @@ class WorkTransformer extends TransformerAbstract
         return $data;
     }
 
-    public function project($work)
+    public function includeProject($work)
     {
         if(!$work)
             return null;
@@ -49,7 +49,7 @@ class WorkTransformer extends TransformerAbstract
         return $this->item($work->project, new ProjectTransformer());
     }
 
-    public function task($work)
+    public function includeTask($work)
     {
         if(!$work)
             return null;
