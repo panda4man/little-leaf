@@ -18,11 +18,26 @@ class CompanyRepository implements iResourceRepository
     {
         try {
             $company = Company::create($fields);
+            $count = Company::count();
 
+            // If first, then make default
+            if($count < 2) {
+                $company->default = true;
+            }
+
+            // Set belongsTo's
             foreach($relations as $rel) {
                 if($rel instanceof User) {
                     $company->owner()->associate($rel);
                 }
+            }
+
+            // save data thus far
+            $company->save();
+
+            // if making default set all other companies as not default
+            if($count > 1 && $company->owner && $company->default) {
+                $company->owner->companies()->where('id', '<>', $company->id)->update(['default' => 0]);
             }
 
             return $company;
