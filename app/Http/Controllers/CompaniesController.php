@@ -29,7 +29,7 @@ class CompaniesController extends Controller
      */
     public function getSelect(Company $company)
     {
-        session('company', $company->id);
+        session(['company' => $company->id]);
 
         session()->flash('success', 'Switched to ' . $company->name);
         return redirect()->back();
