@@ -48135,8 +48135,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 var app = new __WEBPACK_IMPORTED_MODULE_0_vue___default.a({
     el: '#app',
+    data: function data() {
+        return {
+            messages: {
+                'success': true,
+                'info': true,
+                'warning': true,
+                'error': true
+            }
+        };
+    },
+
     methods: {
-        logout: function logout() {}
+        logout: function logout() {
+            $('#logout-form').submit();
+        }
     }
 });
 
@@ -48188,18 +48201,55 @@ if (token) {
 
 /***/ }),
 
-/***/ "./resources/assets/js/components/bootstrap.js":
+/***/ "./resources/assets/js/components/auth/bootstrap.js":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__work_bootstrap__ = __webpack_require__("./resources/assets/js/components/work/bootstrap.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__login__ = __webpack_require__("./resources/assets/js/components/login.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__login__ = __webpack_require__("./resources/assets/js/components/auth/login.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__register__ = __webpack_require__("./resources/assets/js/components/auth/register.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__email__ = __webpack_require__("./resources/assets/js/components/auth/email.js");
+
 
 
 
 /***/ }),
 
-/***/ "./resources/assets/js/components/login.js":
+/***/ "./resources/assets/js/components/auth/email.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__("./node_modules/vue/dist/vue.common.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
+
+
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('password-email', {
+    data: function data() {
+        return {
+            form: {
+                email: null
+            }
+        };
+    },
+
+    methods: {
+        validateEmail: function validateEmail() {
+            var _this = this;
+
+            this.$validate.validateAll().then(function (res) {
+                if (res) {
+                    _this.doSendEmail();
+                }
+            });
+        },
+        doSendEmail: function doSendEmail() {
+            $('#password-email-form').submit();
+        }
+    }
+});
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/auth/login.js":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -48208,15 +48258,141 @@ if (token) {
 
 
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('login', {
+    props: ['formErrors'],
     data: function data() {
         return {
             forms: {
                 login: {
                     email: null,
-                    password: null
+                    password: null,
+                    rememberMe: false
                 }
             }
         };
+    },
+
+    methods: {
+        validateLogin: function validateLogin() {
+            var _this = this;
+
+            this.$validate.validateAll().then(function (res) {
+                if (res) {
+                    _this.doLogin();
+                }
+            });
+        },
+        doLogin: function doLogin() {
+            $('#login-form').submit();
+        }
+    }
+});
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/auth/register.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__("./node_modules/vue/dist/vue.common.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
+
+
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('register', {
+    props: ['formErrors'],
+    data: function data() {
+        return {
+            forms: {
+                register: {
+                    firstName: null,
+                    lastName: null,
+                    email: null,
+                    password: null,
+                    passwordConfirmation: null
+                }
+            }
+        };
+    },
+
+    methods: {
+        validateRegister: function validateRegister() {
+            var _this = this;
+
+            this.$validate.validateAll().then(function (res) {
+                if (res) {
+                    _this.doRegister();
+                }
+            });
+        },
+        doRegister: function doRegister() {
+            $('#register-form').submit();
+        }
+    }
+});
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/bootstrap.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__work_bootstrap__ = __webpack_require__("./resources/assets/js/components/work/bootstrap.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__auth_bootstrap__ = __webpack_require__("./resources/assets/js/components/auth/bootstrap.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__companies_bootstrap__ = __webpack_require__("./resources/assets/js/components/companies/bootstrap.js");
+
+
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/companies/bootstrap.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__index__ = __webpack_require__("./resources/assets/js/components/companies/index.js");
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/companies/index.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__("./node_modules/vue/dist/vue.common.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
+
+
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('companies', {
+    props: ['companies'],
+    data: function data() {
+        return {
+            mCompanies: this.companies,
+            currentCompany: null
+        };
+    },
+    created: function created() {
+        var d = this.mCompanies.filter(function (c) {
+            return c.default;
+        });
+
+        // if no default and we have companies
+        // pick the first by default
+        if (d.length < 1 && this.mCompanies.length) {
+            this.currentCompany = this.mCompanies[0];
+        } else {
+            this.currentCompany = d[0];
+        }
+    },
+
+    method: {
+        selectCompany: function selectCompany(id) {
+            var _this = this;
+
+            this.mCompanies.map(function (c) {
+                if (c.id === id) {
+                    _this.currentCompany = c;
+                }
+            });
+        }
     }
 });
 
