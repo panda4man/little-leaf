@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddPhotoToCompanies extends Migration
+class AddDefaultToCompanies extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class AddPhotoToCompanies extends Migration
     public function up()
     {
         Schema::table('companies', function (Blueprint $table) {
-            $table->string('photo')->nullable()->after('country');
+            $table->boolean('default')->after('user_id')->default(0);
         });
     }
 
@@ -26,7 +26,7 @@ class AddPhotoToCompanies extends Migration
     public function down()
     {
         Schema::table('companies', function (Blueprint $table) {
-            $table->dropColumn('photo');
+            $table->dropColumn('default');
         });
     }
 }

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddPhotoToCompanies extends Migration
+class AddDueAtToDeliverables extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddPhotoToCompanies extends Migration
      */
     public function up()
     {
-        Schema::table('companies', function (Blueprint $table) {
-            $table->string('photo')->nullable()->after('country');
+        Schema::table('deliverables', function (Blueprint $table) {
+            $table->dateTime('due_at')->after('project_id')->nullable();
         });
     }
 
@@ -25,8 +25,8 @@ class AddPhotoToCompanies extends Migration
      */
     public function down()
     {
-        Schema::table('companies', function (Blueprint $table) {
-            $table->dropColumn('photo');
+        Schema::table('deliverables', function (Blueprint $table) {
+            $table->dropColumn('due_at');
         });
     }
 }
