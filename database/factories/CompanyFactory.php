@@ -16,7 +16,7 @@ use Faker\Generator as Faker;
 $factory->define(App\Models\Company::class, function (Faker $faker) {
     return [
         'user_id' => null,
-        'name'    => $faker->word,
+        'name'    => ucfirst($faker->word),
         'address' => $faker->streetAddress,
         'city'    => $faker->city,
         'state'   => $faker->stateAbbr,
