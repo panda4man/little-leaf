@@ -3,7 +3,7 @@
 @section('title', 'Companies | ' . config('app.name'))
 
 @section('content')
-    <companies :companies="{{ json_encode($companies) }}" inline-template>
+    <companies :states="{{json_encode(config('states'))}}" :companies="{{ json_encode($companies) }}" inline-template>
         <v-layout row>
             <v-flex xs12 sm4 m4 lg3>
                 <v-card>
@@ -61,25 +61,80 @@
                     </v-flex>
                 </v-layout>
             </v-flex>
-            <v-dialog v-model="modals.createModal" max-width="600">
+            <v-dialog v-model="modals.createModal" max-width="500">
                 <v-card>
                     <v-card-title>
-                        Create New Company
+                        <h3 class="headline">Create New Company</h3>
                     </v-card-title>
                     <v-card-text>
-                        <form method="POST" data-vv-scope="create">
-                            <form-errors v-if="formErrors && formErrors.create" :errors="formErrors.create"></form-errors>
-                            <v-text-field
-                                label="Company Name"
-                                name="name"
-                                v-model="forms.newCompany.name"
-                                :error-messages="errors.collect('name', 'create')"
-                                v-validate="'required'">
-                            </v-text-field>
-                        </form>
+                        <v-container grid-list-md>
+                            <form method="POST" data-vv-scope="create">
+                                <form-errors v-if="formErrors && formErrors.create" :form-errors="formErrors.create"></form-errors>
+                                <v-text-field
+                                        label="Company Name"
+                                        name="name"
+                                        v-model="forms.newCompany.name"
+                                        :error-messages="errors.collect('name', 'create')"
+                                        v-validate="'required'">
+                                </v-text-field>
+                                <v-text-field
+                                        label="Address"
+                                        name="address"
+                                        v-model="forms.newCompany.address"
+                                        :error-messages="errors.collect('address', 'create')"
+                                        v-validate="'required'"></v-text-field>
+                                <v-layout row>
+                                    <v-flex xs12 sm6>
+                                        <v-text-field
+                                            label="City"
+                                            name="city"
+                                            v-model="forms.newCompany.city"
+                                            :error-messages="errors.collect('city', 'create')"
+                                            v-validate="'required'"></v-text-field>
+                                    </v-flex>
+                                    <v-flex xs12 sm6>
+                                        <v-text-field
+                                            label="Zip Code"
+                                            name="zip"
+                                            v-model="forms.newCompany.zip"
+                                            :error-messages="errors.collect('zip', 'create')"
+                                            v-validate="'required'"></v-text-field>
+                                    </v-flex>
+                                </v-layout>
+                                <v-layout row>
+                                    <v-flex xs12 sm6>
+                                        <v-select
+                                            :items="formattedStates"
+                                            v-model="forms.newCompany.state"
+                                            label="State"
+                                            single-line
+                                            bottom></v-select>
+                                    </v-flex>
+                                    <v-flex xs12 sm6>
+                                        <v-text-field
+                                            label="Country"
+                                            name="country"
+                                            v-model="forms.newCompany.country"
+                                            :error-messages="errors.collect('country', 'create')"
+                                            v-validate="'required'"></v-text-field>
+                                    </v-flex>
+                                </v-layout>
+                                <v-layout row>
+                                    <v-flex xs12 sm12>
+                                        <input id="photo-input-create" type="file" name="photo" style="display: none">
+                                        <img style="width:100%" id="create-company-preview" :src="imagePreview">
+                                        <v-btn @click="openSelectPhotoCreate" color="primary">Choose Photo</v-btn>
+                                        <v-btn @click="clearSelectedPhotoCreate" flat>Clear</v-btn>
+                                    </v-flex>
+                                </v-layout>
+                            </form>
+                        </v-container>
                     </v-card-text>
                     <v-card-actions>
-                        <v-btn @click.stop="validateCreateCompany" color="primary">Create</v-btn>
+                        <v-spacer></v-spacer>
+                        <v-btn :disabled="http.creatingCompany" :loading="http.creatingCompany" @click.stop="validateCreateCompany" color="primary">
+                            Create
+                        </v-btn>
                         <v-btn @click.stop="closeCreateModal" flat>Cancel</v-btn>
                     </v-card-actions>
                 </v-card>

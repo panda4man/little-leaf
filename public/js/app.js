@@ -1631,6 +1631,26 @@ module.exports = {
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/errors/FormErrors.vue":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['formErrors']
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/work/Day.vue":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -20205,6 +20225,38 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-6387116a", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-9ef23fe8\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/errors/FormErrors.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    _vm._l(_vm.errors, function(es, key) {
+      return _c(
+        "v-alert",
+        { key: key },
+        _vm._l(es, function(e, index) {
+          return _c("div", { key: index }, [_vm._v(_vm._s(e))])
+        })
+      )
+    })
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-9ef23fe8", module.exports)
   }
 }
 
@@ -48359,12 +48411,19 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('register', {
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__("./node_modules/vue/dist/vue.common.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__errors_FormErrors_vue__ = __webpack_require__("./resources/assets/js/components/errors/FormErrors.vue");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__errors_FormErrors_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__errors_FormErrors_vue__);
+
 
 
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('companies', {
-    props: ['companies'],
+    components: { FormErrors: __WEBPACK_IMPORTED_MODULE_1__errors_FormErrors_vue___default.a },
+    props: ['companies', 'states'],
     data: function data() {
         return {
+            http: {
+                creatingCompany: false
+            },
             mCompanies: this.companies,
             currentCompany: null,
             modals: {
@@ -48372,9 +48431,16 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('companies', {
             },
             forms: {
                 newCompany: {
-                    name: null
+                    name: null,
+                    address: null,
+                    city: null,
+                    state: null,
+                    country: null,
+                    zip: null
                 }
-            }
+            },
+            imagePreview: null,
+            formErrors: {}
         };
     },
     created: function created() {
@@ -48390,14 +48456,60 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('companies', {
             this.currentCompany = d[0];
         }
     },
+    mounted: function mounted() {
+        var _this = this;
+
+        $(document).ready(function () {
+            $('#photo-input-create').change(function (e) {
+                _this.readImageUrl(e.target, $('#create-company-preview'));
+            });
+        });
+    },
 
     methods: {
         selectCompany: function selectCompany(id) {
-            var _this = this;
+            var _this2 = this;
 
             this.mCompanies.map(function (c) {
                 if (c.id === id) {
-                    _this.currentCompany = c;
+                    _this2.currentCompany = c;
+                }
+            });
+        },
+        validateCreateCompany: function validateCreateCompany() {
+            var _this3 = this;
+
+            this.$validator.validateAll('create').then(function (res) {
+                if (res) {
+                    _this3.createCompany();
+                }
+            });
+        },
+        createCompany: function createCompany() {
+            var _this4 = this;
+
+            var data = new FormData();
+            this.formErrors.create = {};
+            this.http.creatingCompany = true;
+
+            Object.keys(this.forms.newCompany).forEach(function (k) {
+                data.append(k, _this4.forms.newCompany[k]);
+            });
+
+            var photoInput = $('#photo-input-create');
+
+            if (photoInput[0].files) {
+                data.append('photo', photoInput[0].files[0]);
+            }
+
+            this.$http.post('/ajax/companies', data).then(function (res) {
+                _this4.http.creatingCompany = false;
+                _this4.mCompanies.push(res.data.data);
+            }).catch(function (res) {
+                _this4.http.creatingCompany = false;
+
+                if (res.response) {
+                    _this4.formErrors.create = res.response.data;
                 }
             });
         },
@@ -48406,9 +48518,91 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('companies', {
         },
         closeCreateModal: function closeCreateModal() {
             this.modals.createModal = false;
+        },
+        openSelectPhotoCreate: function openSelectPhotoCreate() {
+            $('#photo-input-create').trigger('click');
+        },
+        clearSelectedPhotoCreate: function clearSelectedPhotoCreate() {
+            $('#photo-input-create').val('');
+            $('#create-company-preview').attr('src', '');
+        },
+        readImageUrl: function readImageUrl(inputElement, target) {
+            if (inputElement.files && inputElement.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    target.attr('src', e.target.result);
+                };
+
+                reader.readAsDataURL(inputElement.files[0]);
+            }
+        }
+    },
+    computed: {
+        formattedStates: function formattedStates() {
+            var _this5 = this;
+
+            var states = [];
+
+            Object.keys(this.states).forEach(function (k) {
+                states.push({
+                    text: _this5.states[k],
+                    value: k
+                });
+            });
+
+            return states;
         }
     }
 });
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/errors/FormErrors.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
+/* script */
+var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/errors/FormErrors.vue")
+/* template */
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-9ef23fe8\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/errors/FormErrors.vue")
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/errors/FormErrors.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-9ef23fe8", Component.options)
+  } else {
+    hotAPI.reload("data-v-9ef23fe8", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
 
 /***/ }),
 

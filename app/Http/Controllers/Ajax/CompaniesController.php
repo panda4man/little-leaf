@@ -8,6 +8,7 @@ use App\Models\Company;
 use App\Models\User;
 use App\Repositories\CompanyRepository;
 use App\Transformers\CompanyTransformer;
+use Storage;
 
 class CompaniesController extends Controller
 {
@@ -44,6 +45,14 @@ class CompaniesController extends Controller
         $company = $repo->create($request->all(), $current);
 
         if($company) {
+            if($request->hasFile('photo') && $request->file('photo')) {
+                $file = $request->file('photo')->store('companies');
+
+                $company->update([
+                    'photo' => $file
+                ]);
+            }
+
             $company = fractal()->item($company, new CompanyTransformer())->toArray();
 
             return response()->json([
