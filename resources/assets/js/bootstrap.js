@@ -2,12 +2,14 @@ import Vue from 'vue';
 import Vuetify from 'vuetify';
 import VeeValidate from 'vee-validate';
 import Axios from 'axios';
+import swal from 'sweetalert2';
 import 'vuetify/dist/vuetify.min.css';
 
 Vue.use(Vuetify);
 Vue.use(VeeValidate);
 
 Vue.prototype.$http = Axios;
+Vue.prototype.$swal = swal;
 Vue.prototype.$http.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 window.$ = window.jQuery = require('jquery');
