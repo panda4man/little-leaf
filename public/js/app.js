@@ -50758,7 +50758,7 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('companies', {
                     state: '',
                     country: '',
                     zip: '',
-                    is_default: false
+                    default: false
                 },
                 editCompany: {
                     name: '',
@@ -50768,7 +50768,7 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('companies', {
                     country: '',
                     zip: '',
                     photo: '',
-                    is_default: null
+                    default: null
                 },
                 newClient: {
                     company_id: null,
@@ -50870,17 +50870,56 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('companies', {
             });
         },
         updateCompany: function updateCompany() {
-            alert('updating');
+            var _this6 = this;
+
+            var data = new FormData();
+            this.formErrors.editCompany = {};
+            this.http.updatingCompany = true;
+
+            Object.keys(this.forms.editCompany).forEach(function (k) {
+                if (k !== 'photo') {
+                    data.append(k, _this6.forms.editCompany[k]);
+                }
+            });
+
+            var photoInput = $('#photo-input-edit');
+
+            // Add photo data
+            if (photoInput[0].files) {
+                data.append('photo', photoInput[0].files[0]);
+            }
+
+            this.$http.put('/ajax/companies/' + this.currentCompany.hash_id, data).then(function (res) {
+                _this6.http.updatingCompany = false;
+
+                _this6.updateLocalCompany(res.data.data);
+                _this6.closeEditCompanyModal();
+            }).catch(function (res) {
+                _this6.http.updatingCompany = false;
+
+                if (res.response) {
+                    _this6.formErrors.editCompany = res.response.data;
+                }
+            });
+        },
+        updateLocalCompany: function updateLocalCompany(company) {
+            this.mCompanies.map(function (c) {
+                if (c.id === company.id) {
+                    return company;
+                } else {
+                    return c;
+                }
+            });
         },
         createCompany: function createCompany() {
-            var _this6 = this;
+            var _this7 = this;
 
             var data = new FormData();
             this.formErrors.createCompany = {};
             this.http.creatingCompany = true;
 
             Object.keys(this.forms.newCompany).forEach(function (k) {
-                data.append(k, _this6.forms.newCompany[k]);
+                data.append(k, _this7.forms.newCompany[k]);
             });
 
             var photoInput = $('#photo-input-create');
@@ -50891,40 +50930,40 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('companies', {
             }
 
             this.$http.post('/ajax/companies', data).then(function (res) {
-                _this6.http.creatingCompany = false;
+                _this7.http.creatingCompany = false;
 
-                _this6.mCompanies.push(res.data.data);
-                _this6.closeCreateCompanyModal();
+                _this7.mCompanies.push(res.data.data);
+                _this7.closeCreateCompanyModal();
             }).catch(function (res) {
-                _this6.http.creatingCompany = false;
+                _this7.http.creatingCompany = false;
 
                 if (res.response) {
-                    _this6.formErrors.createCompany = res.response.data;
+                    _this7.formErrors.createCompany = res.response.data;
                 }
             });
         },
         createClient: function createClient() {
-            var _this7 = this;
+            var _this8 = this;
 
             var data = new FormData();
             this.formErrors.createClient = {};
             this.http.creatingClient = true;
 
             Object.keys(this.forms.newClient).forEach(function (k) {
-                data.append(k, _this7.forms.newClient[k]);
+                data.append(k, _this8.forms.newClient[k]);
             });
 
             this.$http.post('/ajax/clients', data).then(function (res) {
                 var newClient = res.data.data;
 
-                _this7.http.creatingClient = false;
-                _this7.addClientToCompany(newClient.company.id, res.data.data);
-                _this7.closeCreateClientModal();
+                _this8.http.creatingClient = false;
+                _this8.addClientToCompany(newClient.company.id, res.data.data);
+                _this8.closeCreateClientModal();
             }).catch(function (res) {
-                _this7.http.creatingClient = false;
+                _this8.http.creatingClient = false;
 
                 if (res.response) {
-                    _this7.formErrors.createClient = res.response.data;
+                    _this8.formErrors.createClient = res.response.data;
                 }
             });
         },
@@ -50941,11 +50980,11 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('companies', {
             this.modals.createClient = true;
         },
         closeCreateClientModal: function closeCreateClientModal() {
-            var _this8 = this;
+            var _this9 = this;
 
             // empty form object
             Object.keys(this.forms.newClient).forEach(function (k) {
-                _this8.forms.newClient[k] = '';
+                _this9.forms.newClient[k] = '';
             });
 
             // hide modal
@@ -50957,10 +50996,10 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('companies', {
             this.modals.createCompany = true;
         },
         closeCreateCompanyModal: function closeCreateCompanyModal() {
-            var _this9 = this;
+            var _this10 = this;
 
             Object.keys(this.forms.newCompany).forEach(function (k) {
-                _this9.forms.newCompany[k] = '';
+                _this10.forms.newCompany[k] = '';
             });
 
             this.modals.createCompany = false;
@@ -50968,19 +51007,19 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('companies', {
             this.errors.clear();
         },
         openEditCompanyModal: function openEditCompanyModal(id) {
-            var _this10 = this;
+            var _this11 = this;
 
             Object.keys(this.forms.editCompany).forEach(function (k) {
-                _this10.forms.editCompany[k] = _this10.currentCompany[k];
+                _this11.forms.editCompany[k] = _this11.currentCompany[k];
             });
 
             this.modals.editCompany = true;
         },
         closeEditCompanyModal: function closeEditCompanyModal() {
-            var _this11 = this;
+            var _this12 = this;
 
             Object.keys(this.forms.editCompany).forEach(function (k) {
-                _this11.forms.editCompany[k] = '';
+                _this12.forms.editCompany[k] = '';
             });
 
             this.modals.editCompany = false;
@@ -51020,13 +51059,13 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('companies', {
     },
     computed: {
         formattedStates: function formattedStates() {
-            var _this12 = this;
+            var _this13 = this;
 
             var states = [];
 
             Object.keys(this.states).forEach(function (k) {
                 states.push({
-                    text: _this12.states[k],
+                    text: _this13.states[k],
                     value: k
                 });
             });
