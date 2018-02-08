@@ -11,9 +11,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/companies', 'CompaniesController@index');
     Route::get('/companies/{company}/select', ['as' => 'set-company', 'uses' => 'CompaniesController@getSelect']);
 
-    // Render base clients view
-    Route::get('/clients', 'ClientsController@index');
-
     // Work View Routes
     Route::get('/work', 'WorkController@index');
     Route::get('/work/month', ['as' => 'work-monthly', 'uses' => 'WorkController@getMonthView']);
@@ -22,8 +19,12 @@ Route::group(['middleware' => 'auth'], function () {
 
     // Ajax Routes
     Route::group(['prefix' => 'ajax', 'namespace' => 'Ajax'], function () {
-        Route::get('/companies/{id}', 'CompaniesController@find');
+        // Company
+        Route::get('/companies/{id}', 'CompaniesController@show');
         Route::post('/companies', 'CompaniesController@store');
         Route::put('/companies/{company}', 'CompaniesController@update');
+
+        // Client
+        Route::post('/clients', 'ClientsController@store');
     });
 });
