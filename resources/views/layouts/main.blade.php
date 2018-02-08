@@ -23,7 +23,9 @@
                 <v-btn href="/register" flat>Register</v-btn>
             @endguest
             @auth
-                <v-btn href="/companies" flat>Companies</v-btn>
+                <v-btn href="/work" flat><v-icon left>laptop_mac</v-icon>Get to Work</v-btn>
+                <v-btn href="/clients" flat><v-icon left>supervisor_account</v-icon>Clients</v-btn>
+                <v-btn href="/companies" flat><v-icon left>work</v-icon>Companies</v-btn>
                 <v-menu bottom left offset-y close-on-click
                         origin="bottom top"
                         transition="v-scale-transition">
@@ -39,7 +41,7 @@
                         <v-divider></v-divider>
                         <v-subheader>Companies</v-subheader>
                         @foreach(auth()->user()->companies as $c)
-                            <v-list-tile href="/companies/{{$c->id}}/select" ripple>
+                            <v-list-tile href="{{route('set-company', $c)}}" ripple>
                                 <v-list-tile-title>
                                     {{$c->name}}
                                 </v-list-tile-title>
