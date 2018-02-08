@@ -8,6 +8,7 @@ use App\Models\Company;
 use App\Models\User;
 use App\Repositories\CompanyRepository;
 use App\Transformers\CompanyTransformer;
+use Storage;
 
 class CompaniesController extends Controller
 {
@@ -73,7 +74,18 @@ class CompaniesController extends Controller
      */
     public function update(Company $company, CreateCompanyRequest $req, CompanyRepository $repo)
     {
-        $success = $repo->update($company->id, $req->all());
+        $data = $req->all();
+
+        // Store new photo and save path
+        // Delete old photo
+        if($req->hasFile('photo') && $req->file('photo')) {
+            $oldPhoto = $company->photo;
+            $file = $req->file('photo')->store('companies');
+            $data['photo'] = $file;
+            Storage::delete($oldPhoto);
+        }
+
+        $success = $repo->update($company->id, $data);
 
         if($success) {
             $company = $repo->find($company->id);
