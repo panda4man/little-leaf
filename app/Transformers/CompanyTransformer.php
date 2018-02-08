@@ -3,9 +3,13 @@
 namespace App\Transformers;
 
 use League\Fractal\TransformerAbstract;
+use Storage;
 
 class CompanyTransformer extends TransformerAbstract
 {
+    /**
+     * @var array
+     */
     protected $availableIncludes = ['clients'];
 
     /**
@@ -30,17 +34,21 @@ class CompanyTransformer extends TransformerAbstract
             'state'   => $company->state,
             'zip'     => $company->zip,
             'country' => $company->country,
-            'photo'   => $company->photo,
+            'photo'   => $company->photo ? Storage::url($company->photo) : null,
             'default' => $company->default,
         ];
 
         return $data;
     }
 
+    /**
+     * @param $company
+     * @return array|\League\Fractal\Resource\Collection
+     */
     public function includeClients($company)
     {
         if(!$company)
-            return null;
+            return [];
 
         $company->load('clients');
 

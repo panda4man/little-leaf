@@ -7,6 +7,11 @@ use League\Fractal\TransformerAbstract;
 class ClientTransformer extends TransformerAbstract
 {
     /**
+     * @var array
+     */
+    protected $availableIncludes = ['company'];
+
+    /**
      * A Fractal transformer.
      *
      * @param $client
@@ -31,5 +36,19 @@ class ClientTransformer extends TransformerAbstract
         ];
 
         return $data;
+    }
+
+    /**
+     * @param $client
+     * @return \League\Fractal\Resource\Item|array
+     */
+    public function includeCompany($client)
+    {
+        if(!$client)
+            return [];
+
+        $client->load('company');
+
+        return $this->item($client->company, new CompanyTransformer());
     }
 }
