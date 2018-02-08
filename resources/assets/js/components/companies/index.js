@@ -125,7 +125,44 @@ Vue.component('companies', {
             });
         },
         updateCompany() {
-            alert('updating');
+            let data = new FormData();
+            this.formErrors.editCompany = {};
+            this.http.updatingCompany = true;
+
+            Object.keys(this.forms.editCompany).forEach(k => {
+                if(k !== 'photo') {
+                    data.append(k, this.forms.editCompany[k]);
+                }
+            });
+
+            let photoInput = $('#photo-input-edit');
+
+            // Add photo data
+            if(photoInput[0].files) {
+                data.append('photo', photoInput[0].files[0]);
+            }
+
+            this.$http.put(`/ajax/companies/${this.currentCompany.id}`, data).then(res => {
+                this.http.updatingCompany = false;
+
+                this.updateLocalCompany(res.data.data);
+                this.closeEditCompanyModal();
+            }).catch(res => {
+                this.http.updatingCompany = false;
+
+                if(res.response) {
+                    this.formErrors.editCompany = res.response.data;
+                }
+            });
+        },
+        updateLocalCompany(company) {
+            this.mCompanies.map(c => {
+                if(c.id === company.id) {
+                    return company;
+                } else {
+                    return c;
+                }
+            });
         },
         createCompany() {
             let data = new FormData();
