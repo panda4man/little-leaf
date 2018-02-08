@@ -1,32 +1,61 @@
 import Vue from 'vue';
 import FormErrors from '../errors/FormErrors.vue';
+import CompanyCard from './CompanyCard.vue';
 
 Vue.component('companies', {
-    components: {FormErrors},
+    components: {FormErrors, CompanyCard},
     props: ['companies', 'states'],
     data() {
         return {
             http: {
-                creatingCompany: false
+                creatingCompany: false,
+                creatingClient: false,
+                updatingCompany: false
             },
             mCompanies: this.companies,
             currentCompany: null,
             modals: {
-                createModal: false
+                createClient: false,
+                createCompany: false,
+                editCompany: false
             },
             forms: {
                 newCompany: {
-                    name: null,
-                    address: null,
-                    city: null,
-                    state: null,
-                    country: null,
-                    zip: null
+                    name: '',
+                    address: '',
+                    city: '',
+                    state: '',
+                    country: '',
+                    zip: '',
+                    is_default: false
+                },
+                editCompany: {
+                    name: '',
+                    address: '',
+                    city: '',
+                    state: '',
+                    country: '',
+                    zip: '',
+                    photo: '',
+                    is_default: null
+                },
+                newClient: {
+                    company_id: null,
+                    name: '',
+                    address: '',
+                    city: '',
+                    state: '',
+                    country: '',
+                    zip: ''
                 }
             },
-            imagePreview: null,
             formErrors: {}
         };
+    },
+    watch: {
+        currentCompany(d) {
+            this.forms.newClient.company_id = d.id;
+        }
     },
     created() {
         let d = this.mCompanies.filter(c => c.default);
@@ -44,6 +73,14 @@ Vue.component('companies', {
             $('#photo-input-create').change((e) => {
                 this.readImageUrl(e.target, $('#create-company-preview'));
             });
+
+            $('#photo-input-edit').change((e) => {
+                this.readImageUrl(e.target, $('#edit-company-preview'));
+
+                if(this.forms.editCompany.photo) {
+                    $('#edit-company-preview-real').hide();
+                }
+            });
         });
     },
     methods: {
@@ -54,16 +91,45 @@ Vue.component('companies', {
                 }
             });
         },
+        validateCreateClient() {
+            let fields = Object.keys(this.forms.newClient).map(k => {
+                return `create-client.${k}`;
+            });
+
+            this.$validator.validateAll(fields).then(res => {
+                if(res) {
+                    this.createClient();
+                }
+            });
+        },
         validateCreateCompany() {
-            this.$validator.validateAll('create').then(res => {
+            let fields = Object.keys(this.forms.newCompany).map(k => {
+                return `create-company.${k}`;
+            });
+
+            this.$validator.validateAll(fields).then(res => {
                 if(res) {
                     this.createCompany();
                 }
             });
         },
+        validateUpdateCompany() {
+            let fields = Object.keys(this.forms.newCompany).map(k => {
+                return `edit-company.${k}`;
+            });
+
+            this.$validator.validateAll(fields).then(res => {
+                if(res) {
+                    this.updateCompany();
+                }
+            });
+        },
+        updateCompany() {
+            alert('updating');
+        },
         createCompany() {
             let data = new FormData();
-            this.formErrors.create = {};
+            this.formErrors.createCompany = {};
             this.http.creatingCompany = true;
 
             Object.keys(this.forms.newCompany).forEach(k => {
@@ -72,26 +138,96 @@ Vue.component('companies', {
 
             let photoInput = $('#photo-input-create');
 
+            // Add photo data
             if(photoInput[0].files) {
                 data.append('photo', photoInput[0].files[0]);
             }
 
             this.$http.post('/ajax/companies', data).then(res => {
                 this.http.creatingCompany = false;
+
                 this.mCompanies.push(res.data.data);
+                this.closeCreateCompanyModal();
             }).catch(res => {
                 this.http.creatingCompany = false;
 
                 if(res.response) {
-                    this.formErrors.create = res.response.data;
+                    this.formErrors.createCompany = res.response.data;
                 }
             });
         },
-        openCreateModal() {
-            this.modals.createModal = true;
+        createClient() {
+            let data = new FormData();
+            this.formErrors.createClient = {};
+            this.http.creatingClient = true;
+
+            Object.keys(this.forms.newClient).forEach(k => {
+                data.append(k, this.forms.newClient[k]);
+            });
+
+            this.$http.post('/ajax/clients', data).then(res => {
+                let newClient = res.data.data;
+
+                this.http.creatingClient = false;
+                this.addClientToCompany(newClient.company.id, res.data.data);
+                this.closeCreateClientModal();
+            }).catch(res => {
+                this.http.creatingClient = false;
+
+                if(res.response) {
+                    this.formErrors.createClient = res.response.data;
+                }
+            });
         },
-        closeCreateModal() {
-            this.modals.createModal = false;
+        addClientToCompany(cId, client) {
+            let index = this.mCompanies.map(c => c.id).indexOf(cId);
+
+            if(index > -1) {
+                this.mCompanies[index].clients.push(client);
+            }
+        },
+        openCreateClientModal() {
+            this.modals.createClient = true;
+        },
+        closeCreateClientModal() {
+            // empty form object
+            Object.keys(this.forms.newClient).forEach(k => {
+                this.forms.newClient[k] = '';
+            });
+
+            // hide modal
+            this.modals.createClient = false;
+
+            this.errors.clear();
+        },
+        openCreateCompanyModal() {
+            this.modals.createCompany = true;
+        },
+        closeCreateCompanyModal() {
+            Object.keys(this.forms.newCompany).forEach(k => {
+                this.forms.newCompany[k] = '';
+            });
+
+            this.modals.createCompany = false;
+            this.clearSelectedPhotoCreate();
+            this.errors.clear();
+        },
+        openEditCompanyModal(id) {
+            Object.keys(this.forms.editCompany).forEach(k => {
+                this.forms.editCompany[k] = this.currentCompany[k];
+            });
+
+            this.modals.editCompany = true;
+        },
+        closeEditCompanyModal() {
+            Object.keys(this.forms.editCompany).forEach(k => {
+                this.forms.editCompany[k] = '';
+            });
+
+            this.modals.editCompany = false;
+
+            this.clearSelectedPhotoEdit();
+            this.errors.clear();
         },
         openSelectPhotoCreate() {
             $('#photo-input-create').trigger('click');
@@ -99,6 +235,17 @@ Vue.component('companies', {
         clearSelectedPhotoCreate() {
             $('#photo-input-create').val('');
             $('#create-company-preview').attr('src', '');
+        },
+        openSelectPhotoEdit() {
+            $('#photo-input-edit').trigger('click');
+        },
+        clearSelectedPhotoEdit() {
+            $('#photo-input-edit').val('');
+            $('#edit-company-preview').attr('src', '');
+
+            if(this.forms.editCompany.photo) {
+                $('#edit-company-preview-real').show();
+            }
         },
         readImageUrl(inputElement, target) {
             if (inputElement.files && inputElement.files[0]) {
