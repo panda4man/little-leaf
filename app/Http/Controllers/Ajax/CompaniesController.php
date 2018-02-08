@@ -8,7 +8,6 @@ use App\Models\Company;
 use App\Models\User;
 use App\Repositories\CompanyRepository;
 use App\Transformers\CompanyTransformer;
-use Storage;
 
 class CompaniesController extends Controller
 {
@@ -17,7 +16,7 @@ class CompaniesController extends Controller
      * @param CompanyRepository $repo
      * @return \Illuminate\Http\JsonResponse
      */
-    public function find($id, CompanyRepository $repo)
+    public function show($id, CompanyRepository $repo)
     {
         $company = $repo->find($id);
         $company = fractal()->item($company, new CompanyTransformer())->toArray();
