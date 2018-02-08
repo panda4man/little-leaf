@@ -30,7 +30,7 @@ class CreateCompanyRequest extends FormRequest
             'state'      => 'required',
             'zip'        => 'required',
             'country'    => 'required',
-            'is_default' => 'boolean',
+            'default' => 'boolean',
         ];
     }
 }
