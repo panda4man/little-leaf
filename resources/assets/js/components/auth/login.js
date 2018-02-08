@@ -15,7 +15,7 @@ Vue.component('login', {
     },
     methods: {
         validateLogin() {
-            this.$validate.validateAll().then(res => {
+            this.$validator.validateAll().then(res => {
                 if(res) {
                     this.doLogin();
                 }
