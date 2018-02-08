@@ -27,7 +27,7 @@ Vue.component('companies', {
                     state: '',
                     country: '',
                     zip: '',
-                    is_default: false
+                    default: false
                 },
                 editCompany: {
                     name: '',
@@ -37,7 +37,7 @@ Vue.component('companies', {
                     country: '',
                     zip: '',
                     photo: '',
-                    is_default: null
+                    default: null
                 },
                 newClient: {
                     company_id: null,
@@ -142,7 +142,7 @@ Vue.component('companies', {
                 data.append('photo', photoInput[0].files[0]);
             }
 
-            this.$http.put(`/ajax/companies/${this.currentCompany.id}`, data).then(res => {
+            this.$http.put(`/ajax/companies/${this.currentCompany.hash_id}`, data).then(res => {
                 this.http.updatingCompany = false;
 
                 this.updateLocalCompany(res.data.data);
