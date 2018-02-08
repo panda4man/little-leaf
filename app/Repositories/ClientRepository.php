@@ -5,6 +5,7 @@ namespace App\Repositories;
 
 
 use App\Models\Client;
+use App\Models\Company;
 
 class ClientRepository implements iResourceRepository
 {
@@ -18,15 +19,17 @@ class ClientRepository implements iResourceRepository
     public function create(array $fields = [], ...$relations)
     {
         try {
-            $company = Client::create($fields);
+            $client = Client::create($fields);
 
             foreach($relations as $rel) {
-                if($rel instanceof Client) {
-                    $company->company()->associate($rel);
+                if($rel instanceof Company) {
+                    $client->company()->associate($rel);
                 }
             }
 
-            return $company;
+            $client->save();
+
+            return $client;
         } catch (\Exception $e) {
             \Log::error($e->getMessage());
             return null;
