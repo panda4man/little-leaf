@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Facades\ModelHashId;
 use App\Searches\WorkSearch;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\ServiceProvider;
@@ -34,6 +35,10 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->bind(WorkSearch::class, function () {
             return new WorkSearch();
+        });
+
+        $this->app->singleton(ModelHashId::class, function () {
+            return new \Hashids\Hashids(config('services.hashid.key'), config('services.hashid.padding'));
         });
     }
 }
