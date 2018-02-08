@@ -6,6 +6,7 @@ use App\Http\Requests\CreateClientRequest;
 use App\Http\Controllers\Controller;
 use App\Repositories\ClientRepository;
 use App\Repositories\CompanyRepository;
+use App\Transformers\ClientTransformer;
 
 class ClientsController extends Controller
 {
@@ -15,13 +16,18 @@ class ClientsController extends Controller
         $client = $clientRepo->create($request->all(), $company);
 
         if($client) {
+            $client = fractal()->item($client, new ClientTransformer)
+                ->includeCompany()
+                ->toArray();
+
             return response()->json([
-                'success' => true
+                'success' => true,
+                'data'    => $client,
             ], 203);
         }
 
         return response()->json([
-            'success' => false
+            'success' => false,
         ], 400);
     }
 }
