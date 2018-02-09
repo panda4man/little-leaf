@@ -28,6 +28,7 @@ class CompanyTransformer extends TransformerAbstract
 
         $data = [
             'id'      => $company->id,
+            'hash_id' => $company->hash_id,
             'name'    => $company->name,
             'address' => $company->address,
             'city'    => $company->city,

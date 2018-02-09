@@ -27,6 +27,7 @@ class ClientTransformer extends TransformerAbstract
 
         $data = [
             'id'      => $client->id,
+            'hash_id' => $client->hash_id,
             'name'    => $client->name,
             'address' => $client->address,
             'city'    => $client->city,
