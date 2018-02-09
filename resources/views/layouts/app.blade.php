@@ -8,8 +8,8 @@
     <title>@yield('title', config('app.name'))</title>
 
     {{-- Styles --}}
-    <link href="{{ mix('css/app.css') }}" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
+    <link href="{{ mix('css/app.css') }}" rel="stylesheet">
 
     {{-- Scripts --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/core-js/2.4.1/core.js"></script>
