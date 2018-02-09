@@ -39,7 +39,7 @@
                             </v-card-title>
                             <v-card-text>
                                 <v-list v-if="currentCompany.clients && currentCompany.clients.length">
-                                    <v-list-tile v-for="client in currentCompany.clients" :key="client.id">
+                                    <v-list-tile :href="'/clients/' + currentCompany.hash_id" v-for="client in currentCompany.clients" :key="client.id">
                                         <v-list-tile-content>
                                             <v-list-tile-title v-text="client.name"></v-list-tile-title>
                                         </v-list-tile-content>
@@ -246,7 +246,7 @@
                     </v-card-text>
                     <v-card-actions>
                         <v-spacer></v-spacer>
-                        <v-btn :disabled="http.updatingCompany || errors.any()" :loading="http.editingCompany" @click.stop="validateUpdateCompany" color="primary">
+                        <v-btn :disabled="http.updatingCompany || errors.any()" :loading="http.updatingCompany" @click.stop="validateUpdateCompany" color="primary">
                             Update
                         </v-btn>
                         <v-btn @click.stop="closeEditCompanyModal">Cancel</v-btn>

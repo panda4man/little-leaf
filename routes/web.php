@@ -11,6 +11,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/companies', 'CompaniesController@index');
     Route::get('/companies/{company}/select', ['as' => 'set-company', 'uses' => 'CompaniesController@getSelect']);
 
+    // Client routes
+    Route::get('/clients', 'ClientsController@index');
+    Route::get('/clients/{client}', 'ClientsController@show');
+
     // Work View Routes
     Route::get('/work', 'WorkController@index');
     Route::get('/work/month', ['as' => 'work-monthly', 'uses' => 'WorkController@getMonthView']);

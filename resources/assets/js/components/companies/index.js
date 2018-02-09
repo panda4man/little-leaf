@@ -36,8 +36,8 @@ Vue.component('companies', {
                     state: '',
                     country: '',
                     zip: '',
-                    photo: '',
-                    default: null
+                    default: false,
+                    photo: ''
                 },
                 newClient: {
                     company_id: null,
@@ -131,18 +131,26 @@ Vue.component('companies', {
 
             Object.keys(this.forms.editCompany).forEach(k => {
                 if(k !== 'photo') {
-                    data.append(k, this.forms.editCompany[k]);
+                    let val = this.forms.editCompany[k];
+
+                    if(k === 'default') {
+                        val = val ? 1 : 0;
+                    }
+
+                    data.append(k, val);
                 }
             });
 
             let photoInput = $('#photo-input-edit');
 
             // Add photo data
-            if(photoInput[0].files) {
+            if(photoInput[0].files && photoInput[0].files[0]) {
                 data.append('photo', photoInput[0].files[0]);
             }
 
-            this.$http.put(`/ajax/companies/${this.currentCompany.hash_id}`, data).then(res => {
+            data.append('_method', 'PUT');
+
+            this.$http.post(`/ajax/companies/${this.currentCompany.hash_id}`, data).then(res => {
                 this.http.updatingCompany = false;
 
                 this.updateLocalCompany(res.data.data);
@@ -151,13 +159,15 @@ Vue.component('companies', {
                 this.http.updatingCompany = false;
 
                 if(res.response) {
-                    this.formErrors.editCompany = res.response.data;
+                    console.log(res.response);
+                    this.formErrors.editCompany = res.response.data.errors;
                 }
             });
         },
         updateLocalCompany(company) {
             this.mCompanies.map(c => {
                 if(c.id === company.id) {
+                    this.currentCompany = company;
                     return company;
                 } else {
                     return c;
@@ -241,11 +251,12 @@ Vue.component('companies', {
             this.modals.createCompany = true;
         },
         closeCreateCompanyModal() {
+            this.modals.createCompany = false;
+
             Object.keys(this.forms.newCompany).forEach(k => {
                 this.forms.newCompany[k] = '';
             });
 
-            this.modals.createCompany = false;
             this.clearSelectedPhotoCreate();
             this.errors.clear();
         },
@@ -257,11 +268,11 @@ Vue.component('companies', {
             this.modals.editCompany = true;
         },
         closeEditCompanyModal() {
+            this.modals.editCompany = false;
+
             Object.keys(this.forms.editCompany).forEach(k => {
                 this.forms.editCompany[k] = '';
             });
-
-            this.modals.editCompany = false;
 
             this.clearSelectedPhotoEdit();
             this.errors.clear();
