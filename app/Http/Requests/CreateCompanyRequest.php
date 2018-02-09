@@ -24,12 +24,12 @@ class CreateCompanyRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'       => 'required',
-            'address'    => 'required',
-            'city'       => 'required',
-            'state'      => 'required',
-            'zip'        => 'required',
-            'country'    => 'required',
+            'name'    => 'required',
+            'address' => 'required',
+            'city'    => 'required',
+            'state'   => 'required',
+            'zip'     => 'required',
+            'country' => 'required',
             'default' => 'boolean',
         ];
     }
