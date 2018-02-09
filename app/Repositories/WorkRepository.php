@@ -4,7 +4,6 @@
 namespace App\Repositories;
 
 
-use App\Models\Project;
 use App\Models\Task;
 use App\Models\Work;
 
@@ -23,9 +22,7 @@ class WorkRepository implements iResourceRepository
             $work = Work::create($fields);
 
             foreach($relations as $rel) {
-                if($rel instanceof Project) {
-                    $work->project()->associate($rel);
-                } else if($rel instanceof Task) {
+                if($rel instanceof Task) {
                     $work->task()->associate($rel);
                 }
             }
