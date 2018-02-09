@@ -29,11 +29,10 @@
                 <v-layout row wrap>
                     <v-flex xs12 sm12 md6 lg4 v-for="c in mClients" :key="c.id">
                         <v-card>
-                            <v-card-title>
-                                <h3 class="headline">@{{ c.name }}</h3>
-                            </v-card-title>
                             <v-card-text>
-
+                                <h3 class="headline">@{{ c.name }}</h3>
+                                <div>Projects: @{{c.projects.length}}</div>
+                                <div>Completed: @{{ c.projects.filter(p => c.completed_at).length }}</div>
                             </v-card-text>
                             <v-card-actions style="justify-content: center">
                                 <v-btn color="primary" :href="'/clients/' + c.hash_id">Details</v-btn>
