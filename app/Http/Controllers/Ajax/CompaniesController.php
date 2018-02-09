@@ -74,7 +74,7 @@ class CompaniesController extends Controller
      */
     public function update(Company $company, CreateCompanyRequest $req, CompanyRepository $repo)
     {
-        $data = $req->all();
+        $data = $req->except('photo');
 
         // Store new photo and save path
         // Delete old photo
@@ -91,7 +91,9 @@ class CompaniesController extends Controller
             $company = $repo->find($company->id);
 
             if($company) {
-                $company = fractal()->item($company, new CompanyTransformer())->toArray();
+                $company = fractal()->item($company, new CompanyTransformer())
+                    ->includeClients()
+                    ->toArray();
             }
 
             return response()->json(['success' => true, 'data' => $company], 200);
