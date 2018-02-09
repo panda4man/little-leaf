@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use ModelHashId;
 
 class Client extends Model
 {
@@ -13,8 +14,16 @@ class Client extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'address', 'city', 'state', 'zip', 'country'
+        'hash_id', 'name', 'address', 'city', 'state', 'zip', 'country'
     ];
+
+    /**
+     * @return string
+     */
+    public function getRouteKeyName()
+    {
+        return 'hash_id';
+    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -22,5 +31,17 @@ class Client extends Model
     public function company()
     {
         return $this->belongsTo(Company::class);
+    }
+
+    /**
+     * Handle automatic logic
+     */
+    public static function boot()
+    {
+        parent::boot();
+
+        self::creating(function ($client) {
+            $client->hash_id = ModelHashId::encode($client->id);
+        });
     }
 }
