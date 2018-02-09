@@ -17,3 +17,7 @@ function currentCompany() {
 function currentCompanySet() {
     return session('company');
 }
+
+function isCurrentCompany($company) {
+    return session('company') == $company->id;
+}
