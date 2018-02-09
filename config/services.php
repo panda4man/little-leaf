@@ -36,7 +36,8 @@ return [
     ],
 
     'hashid' => [
-        'key'     => env('HASHID_KEY', env('APP_NAME')),
-        'padding' => env('HASHID_PADDING', 10),
+        'key'      => env('HASHID_KEY', env('APP_NAME')),
+        'padding'  => env('HASHID_PADDING', 10),
+        'alphabet' => env('HASHID_ALPHABET', 'abcdefghijklmnopqrstuvwxyz'),
     ],
 ];
