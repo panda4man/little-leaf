@@ -30,5 +30,10 @@ Route::group(['middleware' => 'auth'], function () {
 
         // Client
         Route::post('/clients', 'ClientsController@store');
+
+        // Work
+        Route::post('/work', 'WorkController@store');
+        Route::put('/work/{work}', 'WorkController@update');
+        Route::delete('/work/{work}', 'WorkController@destroy');
     });
 });
