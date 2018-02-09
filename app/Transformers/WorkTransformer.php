@@ -9,12 +9,12 @@ class WorkTransformer extends TransformerAbstract
     /**
      * @var array
      */
-    protected $availableIncludes = ['project', 'task'];
+    protected $availableIncludes = ['task'];
 
     /**
      * @var array
      */
-    protected $defaultIncludes = ['project', 'task'];
+    protected $defaultIncludes = ['task'];
 
     /**
      * A Fractal transformer.
@@ -39,20 +39,14 @@ class WorkTransformer extends TransformerAbstract
         return $data;
     }
 
-    public function includeProject($work)
-    {
-        if(!$work)
-            return null;
-
-        $work->load('project');
-
-        return $this->item($work->project, new ProjectTransformer());
-    }
-
+    /**
+     * @param $work
+     * @return \League\Fractal\Resource\Item|\League\Fractal\Resource\NullResource
+     */
     public function includeTask($work)
     {
         if(!$work)
-            return null;
+            return $this->null();
 
         $work->load('task');
 
