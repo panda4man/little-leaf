@@ -50656,9 +50656,67 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('register', {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__work_bootstrap__ = __webpack_require__("./resources/assets/js/components/work/bootstrap.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__auth_bootstrap__ = __webpack_require__("./resources/assets/js/components/auth/bootstrap.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__companies_bootstrap__ = __webpack_require__("./resources/assets/js/components/companies/bootstrap.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__clients_bootstrap__ = __webpack_require__("./resources/assets/js/components/clients/bootstrap.js");
 
 
 
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/clients/bootstrap.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__index__ = __webpack_require__("./resources/assets/js/components/clients/index.js");
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/clients/index.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__("./node_modules/vue/dist/vue.common.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
+
+
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('clients', {
+    props: ['companies', 'clients'],
+    data: function data() {
+        return {
+            companyFilterIds: []
+        };
+    },
+
+    methods: {
+        filterByCompany: function filterByCompany(companyId) {
+            var i = this.companyFilterIds.indexOf(companyId);
+
+            if (i > -1) {
+                this.companyFilterIds.splice(i, 1);
+            } else {
+                this.companyFilterIds.push(companyId);
+            }
+        },
+        companySelected: function companySelected(companyId) {
+            return this.companyFilterIds.indexOf(companyId) > -1;
+        }
+    },
+    computed: {
+        mClients: function mClients() {
+            var _this = this;
+
+            if (!this.companyFilterIds.length) {
+                return this.clients;
+            } else {
+                return this.clients.filter(function (c) {
+                    return _this.companyFilterIds.indexOf(c.company.id) > -1;
+                });
+            }
+        }
+    }
+});
 
 /***/ }),
 
@@ -50767,8 +50825,8 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('companies', {
                     state: '',
                     country: '',
                     zip: '',
-                    photo: '',
-                    default: null
+                    default: false,
+                    photo: ''
                 },
                 newClient: {
                     company_id: null,
@@ -50878,18 +50936,26 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('companies', {
 
             Object.keys(this.forms.editCompany).forEach(function (k) {
                 if (k !== 'photo') {
-                    data.append(k, _this6.forms.editCompany[k]);
+                    var val = _this6.forms.editCompany[k];
+
+                    if (k === 'default') {
+                        val = val ? 1 : 0;
+                    }
+
+                    data.append(k, val);
                 }
             });
 
             var photoInput = $('#photo-input-edit');
 
             // Add photo data
-            if (photoInput[0].files) {
+            if (photoInput[0].files && photoInput[0].files[0]) {
                 data.append('photo', photoInput[0].files[0]);
             }
 
-            this.$http.put('/ajax/companies/' + this.currentCompany.hash_id, data).then(function (res) {
+            data.append('_method', 'PUT');
+
+            this.$http.post('/ajax/companies/' + this.currentCompany.hash_id, data).then(function (res) {
                 _this6.http.updatingCompany = false;
 
                 _this6.updateLocalCompany(res.data.data);
@@ -50898,13 +50964,17 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('companies', {
                 _this6.http.updatingCompany = false;
 
                 if (res.response) {
-                    _this6.formErrors.editCompany = res.response.data;
+                    console.log(res.response);
+                    _this6.formErrors.editCompany = res.response.data.errors;
                 }
             });
         },
         updateLocalCompany: function updateLocalCompany(company) {
+            var _this7 = this;
+
             this.mCompanies.map(function (c) {
                 if (c.id === company.id) {
+                    _this7.currentCompany = company;
                     return company;
                 } else {
                     return c;
@@ -50912,14 +50982,14 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('companies', {
             });
         },
         createCompany: function createCompany() {
-            var _this7 = this;
+            var _this8 = this;
 
             var data = new FormData();
             this.formErrors.createCompany = {};
             this.http.creatingCompany = true;
 
             Object.keys(this.forms.newCompany).forEach(function (k) {
-                data.append(k, _this7.forms.newCompany[k]);
+                data.append(k, _this8.forms.newCompany[k]);
             });
 
             var photoInput = $('#photo-input-create');
@@ -50930,40 +51000,40 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('companies', {
             }
 
             this.$http.post('/ajax/companies', data).then(function (res) {
-                _this7.http.creatingCompany = false;
+                _this8.http.creatingCompany = false;
 
-                _this7.mCompanies.push(res.data.data);
-                _this7.closeCreateCompanyModal();
+                _this8.mCompanies.push(res.data.data);
+                _this8.closeCreateCompanyModal();
             }).catch(function (res) {
-                _this7.http.creatingCompany = false;
+                _this8.http.creatingCompany = false;
 
                 if (res.response) {
-                    _this7.formErrors.createCompany = res.response.data;
+                    _this8.formErrors.createCompany = res.response.data;
                 }
             });
         },
         createClient: function createClient() {
-            var _this8 = this;
+            var _this9 = this;
 
             var data = new FormData();
             this.formErrors.createClient = {};
             this.http.creatingClient = true;
 
             Object.keys(this.forms.newClient).forEach(function (k) {
-                data.append(k, _this8.forms.newClient[k]);
+                data.append(k, _this9.forms.newClient[k]);
             });
 
             this.$http.post('/ajax/clients', data).then(function (res) {
                 var newClient = res.data.data;
 
-                _this8.http.creatingClient = false;
-                _this8.addClientToCompany(newClient.company.id, res.data.data);
-                _this8.closeCreateClientModal();
+                _this9.http.creatingClient = false;
+                _this9.addClientToCompany(newClient.company.id, res.data.data);
+                _this9.closeCreateClientModal();
             }).catch(function (res) {
-                _this8.http.creatingClient = false;
+                _this9.http.creatingClient = false;
 
                 if (res.response) {
-                    _this8.formErrors.createClient = res.response.data;
+                    _this9.formErrors.createClient = res.response.data;
                 }
             });
         },
@@ -50980,11 +51050,11 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('companies', {
             this.modals.createClient = true;
         },
         closeCreateClientModal: function closeCreateClientModal() {
-            var _this9 = this;
+            var _this10 = this;
 
             // empty form object
             Object.keys(this.forms.newClient).forEach(function (k) {
-                _this9.forms.newClient[k] = '';
+                _this10.forms.newClient[k] = '';
             });
 
             // hide modal
@@ -50996,33 +51066,34 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('companies', {
             this.modals.createCompany = true;
         },
         closeCreateCompanyModal: function closeCreateCompanyModal() {
-            var _this10 = this;
-
-            Object.keys(this.forms.newCompany).forEach(function (k) {
-                _this10.forms.newCompany[k] = '';
-            });
+            var _this11 = this;
 
             this.modals.createCompany = false;
+
+            Object.keys(this.forms.newCompany).forEach(function (k) {
+                _this11.forms.newCompany[k] = '';
+            });
+
             this.clearSelectedPhotoCreate();
             this.errors.clear();
         },
         openEditCompanyModal: function openEditCompanyModal(id) {
-            var _this11 = this;
+            var _this12 = this;
 
             Object.keys(this.forms.editCompany).forEach(function (k) {
-                _this11.forms.editCompany[k] = _this11.currentCompany[k];
+                _this12.forms.editCompany[k] = _this12.currentCompany[k];
             });
 
             this.modals.editCompany = true;
         },
         closeEditCompanyModal: function closeEditCompanyModal() {
-            var _this12 = this;
-
-            Object.keys(this.forms.editCompany).forEach(function (k) {
-                _this12.forms.editCompany[k] = '';
-            });
+            var _this13 = this;
 
             this.modals.editCompany = false;
+
+            Object.keys(this.forms.editCompany).forEach(function (k) {
+                _this13.forms.editCompany[k] = '';
+            });
 
             this.clearSelectedPhotoEdit();
             this.errors.clear();
@@ -51059,13 +51130,13 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('companies', {
     },
     computed: {
         formattedStates: function formattedStates() {
-            var _this13 = this;
+            var _this14 = this;
 
             var states = [];
 
             Object.keys(this.states).forEach(function (k) {
                 states.push({
-                    text: _this13.states[k],
+                    text: _this14.states[k],
                     value: k
                 });
             });
