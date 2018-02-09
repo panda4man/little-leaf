@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use ModelHashId;
+use Storage;
 
 class Company extends Model
 {
@@ -57,6 +58,14 @@ class Company extends Model
 
         self::creating(function ($company) {
             $company->hash_id = ModelHashId::encode($company->id);
+        });
+
+        self::deleting(function ($company) {
+             $path = $company->photo;
+
+             if($path) {
+                 Storage::delete($path);
+             }
         });
     }
 }
