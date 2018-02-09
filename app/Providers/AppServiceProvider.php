@@ -29,16 +29,20 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        if($this->app->environment() !== 'production') {
+        // Load IDE helper anywhere not prod
+        if($this->app->environment() !== 'production' && $this->app->environment() !== 'prod') {
             $this->app->register(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
         }
 
+        // Bind WorkSearch to container
         $this->app->bind(WorkSearch::class, function () {
             return new WorkSearch();
         });
 
+        // Create new singleton to encapsulate instantiating a hashid instance
+        // with the project specific configuration parameters
         $this->app->singleton(ModelHashId::class, function () {
-            return new \Hashids\Hashids(config('services.hashid.key'), config('services.hashid.padding'));
+            return new \Hashids\Hashids(config('services.hashid.key'), config('services.hashid.padding'), config('services.hashid.alphabet'));
         });
     }
 }
