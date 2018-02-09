@@ -12,12 +12,12 @@ class Deliverable extends Model
     /**
      * @var array
      */
-    protected $fillable = ['name', 'due_at'];
+    protected $fillable = ['name', 'estimated_hours', 'description', 'due_at', 'completed_at'];
 
     /**
      * @var array
      */
-    protected $dates = ['due_at'];
+    protected $dates = ['due_at', 'completed_at'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

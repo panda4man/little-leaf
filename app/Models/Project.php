@@ -12,7 +12,7 @@ class Project extends Model
     /**
      * @var array
      */
-    protected $fillable = ['name', 'due_at', 'completed_at'];
+    protected $fillable = ['name', 'estimated_cost', 'estimated_hours', 'due_at', 'completed_at'];
 
     /**
      * @var array
