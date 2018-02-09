@@ -24,7 +24,10 @@ class ClientsController extends Controller
         }
 
         $clients = $clients->orderBy('name')->get();
-        $clients = fractal()->collection($clients, new ClientTransformer())->includeCompany()->toArray();
+        $clients = fractal()->collection($clients, new ClientTransformer())
+            ->includeCompany()
+            ->includeProjects()
+            ->toArray();
         $companies = fractal()->collection($companies, new CompanyTransformer())->toArray();
 
         return view('clients.index', [
