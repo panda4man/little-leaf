@@ -1,18 +1,16 @@
 @extends('layouts.app')
 
 @section('body')
-    <v-toolbar dark color="primary" app>
-        <v-toolbar-title>
-            <a class="white--text" style="text-decoration: none" href="{{ url('/') }}">
-                {{ config('app.name', 'Laravel') }}
-            </a>
+    <v-toolbar color="green lighten-3" flat app>
+        <v-toolbar-title class="white--text">
+            {{ config('app.name', 'Laravel') }}
         </v-toolbar-title>
         @php
             $company = currentCompany();
         @endphp
         @if(currentCompanySet() && $company)
             <v-spacer></v-spacer>
-            <v-btn flat>
+            <v-btn color="white" flat>
                 {{strtoupper($company->name)}}
             </v-btn>
         @endif
@@ -23,14 +21,14 @@
                 <v-btn href="/register" flat>Register</v-btn>
             @endguest
             @auth
-                <v-btn href="/work" flat><v-icon left>laptop_mac</v-icon>Work</v-btn>
-                <v-btn href="/clients" flat><v-icon left>supervisor_account</v-icon>Clients</v-btn>
-                <v-btn href="/companies" flat><v-icon left>work</v-icon>Companies</v-btn>
+                <v-btn href="/work" color="white" flat><v-icon left>laptop_mac</v-icon>Work</v-btn>
+                <v-btn href="/clients" color="white" flat><v-icon left>supervisor_account</v-icon>Clients</v-btn>
+                <v-btn href="/companies" color="white" flat><v-icon left>work</v-icon>Companies</v-btn>
                 <v-menu bottom left offset-y close-on-click
                         origin="bottom top"
                         transition="v-scale-transition">
-                    <v-btn class="white--text" flat light slot="activator">
-                        {{auth()->user()->first_name}}<v-icon light>arrow_drop_down</v-icon>
+                    <v-btn flat color="white" slot="activator">
+                        {{auth()->user()->first_name}}<v-icon>arrow_drop_down</v-icon>
                     </v-btn>
                     <v-list subheader>
                         <v-list-tile href="/" ripple>

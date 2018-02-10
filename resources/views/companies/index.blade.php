@@ -9,7 +9,7 @@
                 <v-card>
                     <v-list>
                         <v-subheader style="justify-content: space-between">Companies <v-btn flat icon color="green" @click="openCreateCompanyModal"><v-icon>add_circle</v-icon></v-btn></v-subheader>
-                        <v-list-tile avatar @click="selectCompany(company.id)" v-for="company in companies" :key="company.id">
+                        <v-list-tile avatar @click="selectCompany(company.id)" v-for="company in mCompanies" :key="company.id">
                             <v-list-tile-avatar>
                                 <img :src="company.photo ? company.photo : 'http://placehold.it/200x200'">
                             </v-list-tile-avatar>
@@ -135,7 +135,7 @@
                                         <img style="width:100%" id="create-company-preview">
                                         <v-layout row>
                                             <v-flex xs12 sm12>
-                                                <v-btn @click="openSelectPhotoCreate" color="primary">Choose Photo</v-btn>
+                                                <v-btn @click="openSelectPhotoCreate" color="success">Choose Photo</v-btn>
                                                 <v-btn @click="clearSelectedPhotoCreate">Clear</v-btn>
                                             </v-flex>
                                         </v-layout>
@@ -146,7 +146,7 @@
                     </v-card-text>
                     <v-card-actions>
                         <v-spacer></v-spacer>
-                        <v-btn :disabled="http.creatingCompany || errors.any()" :loading="http.creatingCompany" @click.stop="validateCreateCompany" color="primary">
+                        <v-btn :disabled="http.creatingCompany || errors.any()" :loading="http.creatingCompany" @click.stop="validateCreateCompany" color="success">
                             Create
                         </v-btn>
                         <v-btn @click.stop="closeCreateCompanyModal">Cancel</v-btn>
@@ -235,7 +235,7 @@
 
                                         <v-layout row>
                                             <v-flex xs12 sm12>
-                                                <v-btn @click="openSelectPhotoEdit" color="primary">Choose Photo</v-btn>
+                                                <v-btn @click="openSelectPhotoEdit" color="success">Choose Photo</v-btn>
                                                 <v-btn @click="clearSelectedPhotoEdit">Clear</v-btn>
                                             </v-flex>
                                         </v-layout>
@@ -246,7 +246,7 @@
                     </v-card-text>
                     <v-card-actions>
                         <v-spacer></v-spacer>
-                        <v-btn :disabled="http.updatingCompany || errors.any()" :loading="http.updatingCompany" @click.stop="validateUpdateCompany" color="primary">
+                        <v-btn :disabled="http.updatingCompany || errors.any()" :loading="http.updatingCompany" @click.stop="validateUpdateCompany" color="success">
                             Update
                         </v-btn>
                         <v-btn @click.stop="closeEditCompanyModal">Cancel</v-btn>
@@ -265,11 +265,11 @@
                             <form method="POST" data-vv-scope="create-client">
                                 <form-errors v-if="formErrors && formErrors.createClient" :form-errors="formErrors.createClient"></form-errors>
                                 <v-text-field
-                                        label="Company Name"
+                                        label="Client Name"
                                         name="name"
                                         v-model="forms.newClient.name"
                                         data-vv-name="create-client.name"
-                                        data-vv-as="company name"
+                                        data-vv-as="client name"
                                         :error-messages="errors.collect('create-client.name')"
                                         v-validate="'required'">
                                 </v-text-field>
@@ -332,7 +332,7 @@
                     </v-card-text>
                     <v-card-actions>
                         <v-spacer></v-spacer>
-                        <v-btn :disabled="http.creatingClient || errors.any()" :loading="http.creatingClient" @click.stop="validateCreateClient" color="primary">
+                        <v-btn :disabled="http.creatingClient || errors.any()" :loading="http.creatingClient" @click.stop="validateCreateClient" color="success">
                             Create
                         </v-btn>
                         <v-btn @click.stop="closeCreateClientModal">Cancel</v-btn>
