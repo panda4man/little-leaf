@@ -10,6 +10,12 @@ use App\Transformers\ClientTransformer;
 
 class ClientsController extends Controller
 {
+    /**
+     * @param CreateClientRequest $request
+     * @param ClientRepository $clientRepo
+     * @param CompanyRepository $compRepo
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function store(CreateClientRequest $request, ClientRepository $clientRepo, CompanyRepository $compRepo)
     {
         $company = $compRepo->find($request->get('company_id'));
@@ -17,6 +23,7 @@ class ClientsController extends Controller
 
         if($client) {
             $client = fractal()->item($client, new ClientTransformer)
+                ->includeProjects()
                 ->includeCompany()
                 ->toArray();
 
