@@ -41,7 +41,7 @@ class AppServiceProvider extends ServiceProvider
 
         // Create new singleton to encapsulate instantiating a hashid instance
         // with the project specific configuration parameters
-        $this->app->singleton(ModelHashId::class, function () {
+        $this->app->bind(ModelHashId::class, function () {
             return new \Hashids\Hashids(config('services.hashid.key'), config('services.hashid.padding'), config('services.hashid.alphabet'));
         });
     }
