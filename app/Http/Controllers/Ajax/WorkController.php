@@ -43,6 +43,12 @@ class WorkController extends Controller
         ]);
     }
 
+    /**
+     * @param Work $work
+     * @param CreateWorkRequest $req
+     * @param WorkRepository $repo
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function update(Work $work, CreateWorkRequest $req, WorkRepository $repo)
     {
         $owner = $work->workable();
