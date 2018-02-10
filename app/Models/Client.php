@@ -48,8 +48,9 @@ class Client extends Model
     {
         parent::boot();
 
-        self::creating(function ($client) {
+        self::created(function ($client) {
             $client->hash_id = ModelHashId::encode($client->id);
+            $client->save();
         });
     }
 }

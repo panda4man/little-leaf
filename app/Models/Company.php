@@ -56,8 +56,9 @@ class Company extends Model
     {
         parent::boot();
 
-        self::creating(function ($company) {
+        self::created(function ($company) {
             $company->hash_id = ModelHashId::encode($company->id);
+            $company->save();
         });
 
         self::deleting(function ($company) {
