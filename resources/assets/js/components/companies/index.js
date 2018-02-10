@@ -180,13 +180,19 @@ Vue.component('companies', {
             this.http.creatingCompany = true;
 
             Object.keys(this.forms.newCompany).forEach(k => {
-                data.append(k, this.forms.newCompany[k]);
+                let val = this.forms.newCompany[k];
+
+                if(k === 'default') {
+                    val = val ? 1 : 0;
+                }
+
+                data.append(k, val);
             });
 
             let photoInput = $('#photo-input-create');
 
             // Add photo data
-            if(photoInput[0].files) {
+            if(photoInput[0].files && photoInput[0].files[0]) {
                 data.append('photo', photoInput[0].files[0]);
             }
 
@@ -199,6 +205,7 @@ Vue.component('companies', {
                 this.http.creatingCompany = false;
 
                 if(res.response) {
+                    console.log(res.response);
                     this.formErrors.createCompany = res.response.data;
                 }
             });
