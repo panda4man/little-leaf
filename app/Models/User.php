@@ -27,6 +27,32 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+    /**
+     * @var array
+     */
+    protected $appends = ['full_name'];
+
+    /**
+     * @return string
+     */
+    public function getFullNameAttribute()
+    {
+        $nameParts = [];
+
+        if($this->first_name) {
+            $nameParts[] = $this->first_name;
+        }
+
+        if($this->last_name) {
+            $nameParts[] = $this->last_name;
+        }
+
+        return implode(' ', $nameParts);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function companies()
     {
         return $this->hasMany(Company::class);
