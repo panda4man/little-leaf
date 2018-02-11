@@ -1,7 +1,7 @@
 @extends('layouts.main')
 
 @section('content')
-    <v-layout row>
+    <v-layout row wrap>
         <v-flex xs12 sm4 md4 lg3>
             <v-card>
                 <v-list>

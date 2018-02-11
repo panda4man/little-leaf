@@ -2,8 +2,11 @@
 
 @section('body')
     <v-toolbar color="green lighten-3" flat app>
+        <v-toolbar-side-icon>
+            <img width="40" src="/img/little-leaf.svg">
+        </v-toolbar-side-icon>
         <v-toolbar-title class="white--text">
-            {{ config('app.name', 'Laravel') }}
+             {{config('app.name')}}
         </v-toolbar-title>
         @php
             $company = currentCompany();
