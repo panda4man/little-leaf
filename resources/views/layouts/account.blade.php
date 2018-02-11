@@ -16,11 +16,17 @@
                         </v-list-tile-content>
                     </v-list-tile>
                     <v-list-tile href="/account/profile" @if(request()->is('account/profile'))disabled @endif>
+                        <v-list-tile-avatar>
+                            <v-icon>perm_identity</v-icon>
+                        </v-list-tile-avatar>
                         <v-list-tile-content>
                             <v-list-tile-title>Profile</v-list-tile-title>
                         </v-list-tile-content>
                     </v-list-tile>
                     <v-list-tile href="/account/social-media" @if(request()->is('account/social-media'))disabled @endif>
+                        <v-list-tile-avatar>
+                            <v-icon>phone_iphone</v-icon>
+                        </v-list-tile-avatar>
                         <v-list-tile-content>
                             <v-list-tile-title>Social Media</v-list-tile-title>
                         </v-list-tile-content>
