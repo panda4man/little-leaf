@@ -32,7 +32,7 @@
 
                             <v-layout row>
                                 <v-flex sm12>
-                                    <v-btn :disabled="errors.any()" primary type="submit">Send Password Reset Link</v-btn>
+                                    <v-btn :disabled="errors.any()" color="success" type="submit">Send Password Reset Link</v-btn>
                                 </v-flex>
                             </v-layout>
                         </form>

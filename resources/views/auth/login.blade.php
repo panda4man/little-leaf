@@ -35,7 +35,7 @@
 
                             <v-layout row>
                                 <v-flex sm12>
-                                    <v-btn :disabled="errors.any()" primary type="submit">Login</v-btn>
+                                    <v-btn :disabled="errors.any()" color="success" type="submit">Login</v-btn>
                                     <v-btn href="{{ route('password.request') }}">Forgot Your Password?</v-btn>
                                 </v-flex>
                             </v-layout>

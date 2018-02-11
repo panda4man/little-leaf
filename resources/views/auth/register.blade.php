@@ -68,7 +68,7 @@
 
                             <v-layout row>
                                 <v-flex sm12>
-                                    <v-btn :disabled="errors.any()" primary type="submit">Register</v-btn>
+                                    <v-btn :disabled="errors.any()" color="success" type="submit">Register</v-btn>
                                 </v-flex>
                             </v-layout>
                         </form>
