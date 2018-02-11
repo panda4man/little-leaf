@@ -17,8 +17,8 @@
         <v-spacer></v-spacer>
         <v-toolbar-items class="hidden-sm-and-down">
             @guest
-                <v-btn href="/login" flat>Login</v-btn>
-                <v-btn href="/register" flat>Register</v-btn>
+                <v-btn href="/login" color="white" flat>Login</v-btn>
+                <v-btn href="/register" color="white" flat>Register</v-btn>
             @endguest
             @auth
                 <v-btn href="/work" color="white" flat><v-icon left>laptop_mac</v-icon>Work</v-btn>
@@ -31,9 +31,9 @@
                         {{auth()->user()->first_name}}<v-icon>arrow_drop_down</v-icon>
                     </v-btn>
                     <v-list subheader>
-                        <v-list-tile href="/" ripple>
+                        <v-list-tile href="/account/profile" ripple>
                             <v-list-tile-title>
-                                <v-icon>person</v-icon>Profile
+                                Settings
                             </v-list-tile-title>
                         </v-list-tile>
                         <v-divider></v-divider>
@@ -46,7 +46,7 @@
                             </v-list-tile>
                         @endforeach
                         <v-divider></v-divider>
-                        <v-list-tile @click.native.prevent="logout" ripple>
+                        <v-list-tile href="/" @click.native.prevent="logout" ripple>
                             <v-list-tile-title>
                                 <v-icon>exit_to_app</v-icon>Logout
                             </v-list-tile-title>
