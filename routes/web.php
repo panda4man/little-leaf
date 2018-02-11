@@ -4,6 +4,10 @@ Auth::routes();
 Route::view('/', 'welcome');
 
 Route::group(['middleware' => 'auth'], function () {
+    // Account
+    Route::get('/account/profile', 'AccountController@getProfile');
+    Route::get('/account/social-media', 'AccountController@getSocialMedia');
+
     // Dashboard
     Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
 
