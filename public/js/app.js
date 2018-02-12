@@ -50519,6 +50519,76 @@ if (token) {
 
 /***/ }),
 
+/***/ "./resources/assets/js/components/account/bootstrap.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__profile__ = __webpack_require__("./resources/assets/js/components/account/profile.js");
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/account/profile.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__("./node_modules/vue/dist/vue.common.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
+
+
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('account-profile', {
+    props: ['user'],
+    data: function data() {
+        return {
+            http: {
+                profile: false
+            },
+            modals: {
+                profile: false
+            },
+            forms: {
+                profile: {
+                    first_name: this.user.first_name,
+                    last_name: this.user.last_name,
+                    email: this.user.email
+                }
+            }
+        };
+    },
+
+    methods: {
+        openEditProfileModal: function openEditProfileModal() {
+            this.modals.profile = true;
+        },
+        closeEditProfileModal: function closeEditProfileModal() {
+            var _this = this;
+
+            this.modals.profile = false;
+
+            Object.keys(this.forms.profile).forEach(function (k) {
+                _this.forms.profile[k] = _this.user[k];
+            });
+
+            this.errors.clear();
+        },
+        validateUpdateProfile: function validateUpdateProfile() {
+            var _this2 = this;
+
+            this.$validator.validateAll().then(function (res) {
+                if (res) {
+                    _this2.updateProfile();
+                }
+            });
+        },
+        updateProfile: function updateProfile() {
+            this.http.profile = true;
+            $('#profile-form').submit();
+        }
+    }
+});
+
+/***/ }),
+
 /***/ "./resources/assets/js/components/auth/bootstrap.js":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -50657,6 +50727,8 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('register', {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__auth_bootstrap__ = __webpack_require__("./resources/assets/js/components/auth/bootstrap.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__companies_bootstrap__ = __webpack_require__("./resources/assets/js/components/companies/bootstrap.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__clients_bootstrap__ = __webpack_require__("./resources/assets/js/components/clients/bootstrap.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__account_bootstrap__ = __webpack_require__("./resources/assets/js/components/account/bootstrap.js");
+
 
 
 
