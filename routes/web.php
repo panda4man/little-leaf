@@ -6,6 +6,7 @@ Route::view('/', 'welcome');
 Route::group(['middleware' => 'auth'], function () {
     // Account
     Route::get('/account/profile', 'AccountController@getProfile');
+    Route::post('/account/profile', 'AccountController@postUpdateProfile');
     Route::get('/account/social-media', 'AccountController@getSocialMedia');
 
     // Dashboard
