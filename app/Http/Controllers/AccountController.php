@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpdateProfileRequest;
+
 class AccountController extends Controller
 {
     /**
@@ -10,6 +12,23 @@ class AccountController extends Controller
     public function getProfile()
     {
         return view('account.profile');
+    }
+
+    /**
+     * @param UpdateProfileRequest $req
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function postUpdateProfile(UpdateProfileRequest $req)
+    {
+        $user = auth()->user();
+
+        if($user->update($req->all())) {
+            session()->flash('success', 'Updated your account');
+        } else {
+            session()->flash('error', 'Could not update your account');
+        }
+
+        return redirect()->back();
     }
 
     /**
