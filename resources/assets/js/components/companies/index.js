@@ -9,13 +9,11 @@ Vue.component('companies', {
         return {
             http: {
                 creatingCompany: false,
-                creatingClient: false,
                 updatingCompany: false
             },
             mCompanies: this.companies,
             currentCompany: null,
             modals: {
-                createClient: false,
                 createCompany: false,
                 editCompany: false
             },
@@ -38,24 +36,10 @@ Vue.component('companies', {
                     zip: '',
                     default: false,
                     photo: ''
-                },
-                newClient: {
-                    company_id: null,
-                    name: '',
-                    address: '',
-                    city: '',
-                    state: '',
-                    country: '',
-                    zip: ''
                 }
             },
             formErrors: {}
         };
-    },
-    watch: {
-        currentCompany(d) {
-            this.forms.newClient.company_id = d.id;
-        }
     },
     created() {
         let d = this.mCompanies.filter(c => c.default);
@@ -85,22 +69,18 @@ Vue.component('companies', {
     },
     methods: {
         selectCompany(id) {
+            let f = false;
+
             this.mCompanies.map(c => {
                 if(c.id === id) {
+                    f = true;
                     this.currentCompany = c;
                 }
             });
-        },
-        validateCreateClient() {
-            let fields = Object.keys(this.forms.newClient).map(k => {
-                return `create-client.${k}`;
-            });
 
-            this.$validator.validateAll(fields).then(res => {
-                if(res) {
-                    this.createClient();
-                }
-            });
+            if(!f) {
+                swal('Uh oh', 'This company could not be found', 'info');
+            }
         },
         validateCreateCompany() {
             let fields = Object.keys(this.forms.newCompany).map(k => {
@@ -165,13 +145,13 @@ Vue.component('companies', {
             });
         },
         updateLocalCompany(company) {
-            this.mCompanies.map(c => {
+            this.mCompanies = this.mCompanies.map(c => {
                 if(c.id === company.id) {
                     this.currentCompany = company;
-                    return company;
-                } else {
-                    return c;
+                    c = company;
                 }
+
+                return c;
             });
         },
         createCompany() {
@@ -210,50 +190,6 @@ Vue.component('companies', {
                 }
             });
         },
-        createClient() {
-            let data = new FormData();
-            this.formErrors.createClient = {};
-            this.http.creatingClient = true;
-
-            Object.keys(this.forms.newClient).forEach(k => {
-                data.append(k, this.forms.newClient[k]);
-            });
-
-            this.$http.post('/ajax/clients', data).then(res => {
-                let newClient = res.data.data;
-
-                this.http.creatingClient = false;
-                this.addClientToCompany(newClient.company.id, res.data.data);
-                this.closeCreateClientModal();
-            }).catch(res => {
-                this.http.creatingClient = false;
-
-                if(res.response) {
-                    this.formErrors.createClient = res.response.data;
-                }
-            });
-        },
-        addClientToCompany(cId, client) {
-            let index = this.mCompanies.map(c => c.id).indexOf(cId);
-
-            if(index > -1) {
-                this.mCompanies[index].clients.push(client);
-            }
-        },
-        openCreateClientModal() {
-            this.modals.createClient = true;
-        },
-        closeCreateClientModal() {
-            // empty form object
-            Object.keys(this.forms.newClient).forEach(k => {
-                this.forms.newClient[k] = '';
-            });
-
-            // hide modal
-            this.modals.createClient = false;
-
-            this.errors.clear();
-        },
         openCreateCompanyModal() {
             this.modals.createCompany = true;
         },
@@ -268,6 +204,8 @@ Vue.component('companies', {
             this.errors.clear();
         },
         openEditCompanyModal(id) {
+            this.selectCompany(id);
+
             Object.keys(this.forms.editCompany).forEach(k => {
                 this.forms.editCompany[k] = this.currentCompany[k];
             });
