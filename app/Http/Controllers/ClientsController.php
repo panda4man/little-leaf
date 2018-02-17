@@ -42,7 +42,10 @@ class ClientsController extends Controller
      */
     public function show(Client $client)
     {
-        $clientJson = fractal()->item($client, new ClientTransformer())->includeCompany()->toArray();
+        $clientJson = fractal()->item($client, new ClientTransformer())
+            ->includeProjects()
+            ->includeCompany()
+            ->toArray();
 
         return view('clients.show', [
             'client' => $client,
