@@ -9,8 +9,22 @@ class Task extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['name'];
+    /**
+     * @var array
+     */
+    protected $fillable = ['name', 'description'];
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function projects()
+    {
+        return $this->belongsToMany(Project::class)->withPivot('rate')->withTimestamps();
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function user()
     {
         return $this->belongsTo(User::class);
