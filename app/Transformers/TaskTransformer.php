@@ -6,7 +6,7 @@ use League\Fractal\TransformerAbstract;
 
 class TaskTransformer extends TransformerAbstract
 {
-    protected $availableIncludes = ['work'];
+    protected $availableIncludes = ['work', 'projects'];
 
     /**
      * A Fractal transformer.
@@ -22,17 +22,36 @@ class TaskTransformer extends TransformerAbstract
             return $data;
 
         $data = [
-            'id'   => $task->id,
-            'name' => $task->name,
+            'id'          => $task->id,
+            'name'        => $task->name,
+            'description' => $task->description,
         ];
 
         return $data;
     }
 
+    /**
+     * @param $task
+     * @return \League\Fractal\Resource\Collection|\League\Fractal\Resource\NullResource
+     */
+    public function includeProjects($task)
+    {
+        if(!$task)
+            return $this->null();
+
+        $task->load('projects');
+
+        return $this->collection($task->projects, new ProjectTransformer());
+    }
+
+    /**
+     * @param $task
+     * @return \League\Fractal\Resource\Item|\League\Fractal\Resource\NullResource
+     */
     public function includeWork($task)
     {
         if(!$task)
-            return null;
+            return $this->null();
 
         $task->load('work');
 

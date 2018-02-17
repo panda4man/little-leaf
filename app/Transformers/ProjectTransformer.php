@@ -63,4 +63,18 @@ class ProjectTransformer extends TransformerAbstract
 
         return $this->collection($project->deliverables, new DeliverableTransformer());
     }
+
+    /**
+     * @param $project
+     * @return \League\Fractal\Resource\Collection|\League\Fractal\Resource\NullResource
+     */
+    public function includeWork($project)
+    {
+        if(!$project)
+            return $this->null();
+
+        $project->load('work');
+
+        return $this->collection($project->work, new WorkTransformer());
+    }
 }
