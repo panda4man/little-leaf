@@ -1,5 +1,12 @@
 <?php
 
+function urlActive($url = '', $class = 'disabled') {
+    if(request()->is($url))
+        return $class;
+
+    return '';
+}
+
 function currentCompany() {
     $cId = session('company');
     $company = null;
