@@ -14,9 +14,10 @@
         "cross-env": "^5.1",
         "jquery": "^3.2",
         "laravel-mix": "^2.0",
-        "sweetalert2": "^7.10.0",
+        "moment": "^2.20.1",
+        "sweetalert2": "^7.12.2",
         "vee-validate": "^2.0.3",
         "vue": "^2.5.7",
-        "vuetify": "^0.17.7"
+        "vuetify": "^1.0.1"
     }
 }
