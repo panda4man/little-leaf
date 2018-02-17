@@ -1,5 +1,7 @@
 @extends('layouts.main')
 
+@section('title', 'Register')
+
 @section('content')
     <register :form-errors="{{$errors}}" inline-template>
         <v-layout row align-center>

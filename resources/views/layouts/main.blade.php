@@ -25,8 +25,8 @@
             @endguest
             @auth
                 <v-btn href="/work" color="white" flat><v-icon left>laptop_mac</v-icon>Work</v-btn>
-                <v-btn href="/clients" color="white" flat><v-icon left>supervisor_account</v-icon>Clients</v-btn>
-                <v-btn href="/companies" color="white" flat><v-icon left>work</v-icon>Companies</v-btn>
+                <v-btn href="/projects" color="white" flat><v-icon left>work</v-icon>Projects</v-btn>
+                <v-btn href="/tasks" color="white" flat><v-icon left>list</v-icon>Tasks</v-btn>
                 <v-menu bottom left offset-y close-on-click
                         origin="bottom top"
                         transition="v-scale-transition">

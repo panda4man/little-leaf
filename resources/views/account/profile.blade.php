@@ -1,6 +1,6 @@
 @extends('layouts.account')
 
-@section('title', 'Profile | ' . config('app.name'))
+@section('title', 'Profile | ')
 
 @section('account-content')
     <account-profile :user="{{json_encode(auth()->user())}}" inline-template>

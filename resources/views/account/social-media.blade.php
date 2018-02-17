@@ -1,6 +1,6 @@
 @extends('layouts.account')
 
-@section('title', 'Social Media | ' . config('app.name'))
+@section('title', 'Social Media | ')
 
 @section('account-content')
 

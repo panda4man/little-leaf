@@ -1,8 +1,8 @@
-@extends('layouts.main')
+@extends('layouts.account')
 
-@section('title', 'Clients | ' . config('app.name'))
+@section('title', 'Clients | ')
 
-@section('content')
+@section('account-content')
     <clients
             :states="{{json_encode(config('states'))}}"
             :clients="{{json_encode($clients)}}"

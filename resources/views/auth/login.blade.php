@@ -1,5 +1,7 @@
 @extends('layouts.main')
 
+@section('title', 'Login')
+
 @section('content')
     <login :form-errors="{{$errors}}" inline-template>
         <v-layout row align-center>
@@ -11,6 +13,9 @@
                         </div>
                     </v-card-title>
                     <v-card-text>
+                        @if(isset($errors) && $errors->count())
+                            i am here
+                        @endif
                         <form @submit="validateLogin" id="login-form" method="POST" action="{{ route('login') }}">
                             {{ csrf_field() }}
 
