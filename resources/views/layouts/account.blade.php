@@ -25,7 +25,7 @@
                     </v-list-tile>
                     <v-list-tile href="/account/companies" {{urlActive('account/companies')}}>
                         <v-list-tile-avatar>
-                            <v-icon left>work</v-icon>
+                            <v-icon left>store</v-icon>
                         </v-list-tile-avatar>
                         <v-list-tile-content>
                             <v-list-tile-title>Companies</v-list-tile-title>
