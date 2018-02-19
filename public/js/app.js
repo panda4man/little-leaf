@@ -38998,9 +38998,9 @@ var render = function() {
                       _c("div", { staticClass: "pl-3" }, [
                         _c("h1", [_vm._v(_vm._s(_vm.company.name))]),
                         _vm._v(" "),
-                        _c("h3", [_vm._v(_vm._s(_vm.company.address))]),
+                        _c("div", [_vm._v(_vm._s(_vm.company.address))]),
                         _vm._v(" "),
-                        _c("h3", [
+                        _c("div", [
                           _vm._v(
                             _vm._s(_vm.company.city) +
                               ", " +
@@ -39010,7 +39010,7 @@ var render = function() {
                           )
                         ]),
                         _vm._v(" "),
-                        _c("h3", [_vm._v(_vm._s(_vm.company.country))])
+                        _c("div", [_vm._v(_vm._s(_vm.company.country))])
                       ]),
                       _vm._v(" "),
                       _c(
@@ -69691,11 +69691,11 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('client-details', {
                 p.completed_at = p.completed_at ? __WEBPACK_IMPORTED_MODULE_1_moment___default.a.utc(p.completed_at) : null;
 
                 if (p.due_at) {
-                    p.due_at = p.due_at.format('m/d/y');
+                    p.due_at = p.due_at.format('MMM Do, YYYY');
                 }
 
                 if (p.completed_at) {
-                    p.completed_at = p.completed_at.format('m/d/y');
+                    p.completed_at = p.completed_at.format('MMM Do, YYYY');
                 }
 
                 return p;
