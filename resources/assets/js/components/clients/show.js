@@ -45,9 +45,6 @@ Vue.component('client-details', {
             }
         }
     },
-    methods: {
-
-    },
     computed: {
         projects() {
             return this.mClient.projects.map(p => {
@@ -56,11 +53,11 @@ Vue.component('client-details', {
                 p.completed_at = p.completed_at ? moment.utc(p.completed_at) : null;
 
                 if(p.due_at) {
-                    p.due_at = p.due_at.format('m/d/y');
+                    p.due_at = p.due_at.format('MMM Do, YYYY');
                 }
 
                 if(p.completed_at) {
-                    p.completed_at = p.completed_at.format('m/d/y');
+                    p.completed_at = p.completed_at.format('MMM Do, YYYY');
                 }
 
                 return p;
