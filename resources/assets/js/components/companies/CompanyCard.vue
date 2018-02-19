@@ -9,9 +9,9 @@
                     <v-flex xs12 sm8 md9>
                         <div class="pl-3">
                             <h1>{{ company.name }}</h1>
-                            <h3>{{ company.address }}</h3>
-                            <h3>{{ company.city }}, {{ company.state }} {{ company.zip }}</h3>
-                            <h3>{{ company.country }}</h3>
+                            <div>{{ company.address }}</div>
+                            <div>{{ company.city }}, {{ company.state }} {{ company.zip }}</div>
+                            <div>{{ company.country }}</div>
                         </div>
                         <div>
                             <v-btn @click="tryToEdit" color="success">
