@@ -31,6 +31,9 @@ Route::group(['middleware' => 'auth'], function () {
     // Tasks
     Route::get('/tasks', 'TasksController@index');
 
+    // Projects
+    Route::get('/projects', 'ProjectsController@index');
+
     // Ajax Routes
     Route::group(['prefix' => 'ajax', 'namespace' => 'Ajax'], function () {
         // Company
