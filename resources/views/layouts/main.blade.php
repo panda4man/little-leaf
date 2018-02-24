@@ -64,6 +64,7 @@
     </v-toolbar>
     <v-content>
         <v-container grid-list-md @yield('contentWidthClass', '')>
+            @yield('breadcrumbs')
             @yield('content')
         </v-container>
     </v-content>
