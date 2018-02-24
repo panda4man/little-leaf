@@ -27,6 +27,8 @@ class ProjectRepository implements iResourceRepository
                 }
             }
 
+            $project->save();
+
             return $project;
         } catch (\Exception $e) {
             \Log::error($e->getMessage());

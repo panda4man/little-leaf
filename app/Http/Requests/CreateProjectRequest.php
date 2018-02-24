@@ -26,7 +26,7 @@ class CreateProjectRequest extends FormRequest
         return [
             'client_id' => 'required|exists:clients,id',
             'name'      => 'required',
-            'due_at'    => 'date_format:Y-m-d',
+            'due_at'    => 'nullable|date_format:Y-m-d',
         ];
     }
 }

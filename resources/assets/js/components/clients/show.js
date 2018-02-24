@@ -1,6 +1,6 @@
 import Vue from 'vue';
-import moment from 'moment';
 import HoursWorked from '../projects/HoursWorked.vue';
+import Project from '../../models/project';
 
 Vue.component('client-details', {
     props: ['client'],
@@ -46,22 +46,8 @@ Vue.component('client-details', {
         }
     },
     computed: {
-        projects() {
-            return this.mClient.projects.map(p => {
-                p.hours_worked = 0;
-                p.due_at = p.due_at ? moment.utc(p.due_at) : null;
-                p.completed_at = p.completed_at ? moment.utc(p.completed_at) : null;
-
-                if(p.due_at) {
-                    p.due_at = p.due_at.format('MMM Do, YYYY');
-                }
-
-                if(p.completed_at) {
-                    p.completed_at = p.completed_at.format('MMM Do, YYYY');
-                }
-
-                return p;
-            });
+        mProjects() {
+            return Project.hydrate(this.mClient.projects);
         }
     }
 });

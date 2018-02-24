@@ -25,8 +25,10 @@ class ProjectsController extends Controller
             $totalHours += $w->hours;
         }
 
-        foreach($project->deliverables->work as $w) {
-            $totalHours += $w->hours;
+        foreach($project->deliverables as $deliv) {
+            foreach($deliv->work as $w) {
+                $totalHours += $w->hours;
+            }
         }
 
         return response()->json([

@@ -1,6 +1,13 @@
 @extends('layouts.account')
 
-@section('title', $client->name . ' | Clients')
+@section('title', $client->name . ' | Clients | ')
+
+@section('breadcrumbs')
+    <v-breadcrumbs divider="/">
+        <v-breadcrumbs-item href="/account/clients">Clients</v-breadcrumbs-item>
+        <v-breadcrumbs-item>{{$client->name}}</v-breadcrumbs-item>
+    </v-breadcrumbs>
+@endsection
 
 @section('account-content')
     <client-details :client="{{json_encode($json)}}" inline-template>
@@ -13,7 +20,7 @@
                     <v-data-table
                             hide-actions
                             :headers="table.headers"
-                            :items="projects">
+                            :items="mProjects">
                         <template slot="items" slot-scope="props">
                             <td>@{{ props.item.name }}</td>
                             <td>@{{ props.item.estimated_hours }}</td>
@@ -22,8 +29,12 @@
                                 </hours-worked>
                             </td>
                             <td>$@{{ props.item.estimated_cost }}</td>
-                            <td>@{{ props.item.due_at }}</td>
-                            <td>@{{ props.item.completed_at }}</td>
+                            <td>
+                                <span v-if="props.item.due_at">@{{ props.item.due_at_moment.format('MMM Do, YYYY') }}</span>
+                            </td>
+                            <td>
+                                <span v-if="props.item.completed_at">@{{ props.item.completed_at_moment.format('MMM Do, YYYY') }}</span>
+                            </td>
                         </template>
                     </v-data-table>
                 </v-card>

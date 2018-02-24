@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-alert :key="key" v-for="(es, key) in errors">
+        <v-alert :value="true" type="error" :key="key" v-for="(es, key) in formErrors">
             <div :key="index" v-for="(e, index) in es">{{e}}</div>
         </v-alert>
     </div>

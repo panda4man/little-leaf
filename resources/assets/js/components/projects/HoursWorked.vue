@@ -1,7 +1,7 @@
 <template>
     <div>
         <slot v-if="http.fetching">
-            <i></i>
+            <v-progress-circular indeterminate color="primary"></v-progress-circular>
         </slot>
         <span v-else>{{hours}}</span>
     </div>
