@@ -19,16 +19,17 @@
     <div id="app">
         <v-app v-cloak>
             @yield('body')
-        </v-app>
 
-        @foreach(['success', 'info', 'warning', 'error'] as $type)
-            @if(session($type))
-                <v-snackbar :top="true" :right="true" :timeout="2000" :{{$type}}="true" v-model="messages.{{$type}}">
-                    {{session($type)}}
-                    <v-btn light flat @click.native="messages.{{$type}} = false">Close</v-btn>
-                </v-snackbar>
-            @endif
-        @endforeach
+            {{-- Snackbars --}}
+            @foreach(['success', 'info', 'warning', 'error'] as $type)
+                @if(session($type))
+                    <v-snackbar :top="true" :right="true" :timeout="2000" color="{{$type}}" v-model="messages.{{$type}}">
+                        {{session($type)}}
+                        <v-btn dark flat @click.native="messages.{{$type}} = false">Close</v-btn>
+                    </v-snackbar>
+                @endif
+            @endforeach
+        </v-app>
     </div>
 
     <!-- Scripts -->
