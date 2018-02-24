@@ -31,7 +31,7 @@
                             <v-list-tile-title>Companies</v-list-tile-title>
                         </v-list-tile-content>
                     </v-list-tile>
-                    <v-list-tile href="/account/clients" {{urlActive('account/clients')}}>
+                    <v-list-tile href="/account/clients" {{urlActive('account/clients*')}}>
                         <v-list-tile-avatar>
                             <v-icon left>supervisor_account</v-icon>
                         </v-list-tile-avatar>
