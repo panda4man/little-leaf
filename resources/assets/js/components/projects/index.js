@@ -231,7 +231,9 @@ Vue.component('projects-list', {
                     });
                 }
             }).then(res => {
-                this.removeLocalProject(id);
+                if(res.value) {
+                    this.removeLocalProject(id);
+                }
             })
         },
         deleteProject(id) {
