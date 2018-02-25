@@ -3,13 +3,19 @@
         <slot v-if="http.fetching">
             <v-progress-circular indeterminate color="primary"></v-progress-circular>
         </slot>
-        <span v-else>{{hours}}</span>
+        <span v-else>{{hours}} {{suffix}}</span>
     </div>
 </template>
 
 <script>
     export default {
-        props: ['project'],
+        props: {
+            project: Object,
+            suffix: {
+                type: String,
+                default: 'hrs'
+            }
+        },
         data() {
             return {
                 http: {

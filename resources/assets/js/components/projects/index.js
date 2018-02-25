@@ -2,6 +2,8 @@ import Vue from 'vue';
 import Project from '../../models/project';
 import HoursWorked from '../projects/HoursWorked.vue';
 import FormErrors from '../errors/FormErrors.vue';
+import swal from 'sweetalert2';
+import Promise from 'bluebird';
 
 Vue.component('projects-list', {
     props: ['projects', 'clients'],
@@ -23,16 +25,24 @@ Vue.component('projects-list', {
                     estimated_cost: '',
                     estimated_hours: '',
                     due_at: '',
-                }
+                },
+                editProject: {}
             },
             formErrors: {
-                newProject: null
+                newProject: null,
+                editProject: null
             },
             http: {
-                creatingProject: false
+                creatingProject: false,
+                updatingProject: false
             },
             table: {
                 headers: [
+                    {
+                        text: '',
+                        sortable: false,
+                        value: 'name'
+                    },
                     {
                         text: 'Client',
                         align: 'left',
@@ -45,12 +55,12 @@ Vue.component('projects-list', {
                         sortable: 'true',
                         value: 'name'
                     }, {
-                        text: 'Estimated Hours',
+                        text: 'Hours',
                         align: 'left',
                         sortable: true,
                         value: 'estimated_hours'
                     }, {
-                        text: 'Hours Worked',
+                        text: 'Worked',
                         align: 'left',
                         sortable: true,
                         value: 'hours_worked'
@@ -73,7 +83,8 @@ Vue.component('projects-list', {
                 ]
             },
             modals: {
-                createNewProject: false
+                createNewProject: false,
+                editProject: false
             }
         }
     },
@@ -92,10 +103,64 @@ Vue.component('projects-list', {
                 this.errors.clear();
             });
         },
+        openEditProjectModal(id) {
+            let found = false;
+            this.forms.editProject = {};
+
+            this.mProjects.map(p => {
+                if(p.id === id) {
+                    found = true;
+
+                    Object.keys(this.forms.newProject).forEach(k => {
+                        if(p.hasOwnProperty(k)) {
+                            this.$set(this.forms.editProject, k, p[k]);
+                        }
+                    });
+
+                    this.forms.editProject.id = p.id;
+                }
+            });
+
+            if(!found) {
+
+            } else {
+                this.modals.editProject = true;
+            }
+        },
+        closeEditProjectModal() {
+            this.modals.editProject = false;
+
+            Object.keys(this.forms.editProject).forEach(k => {
+                this.forms.editProject[k] = '';
+            });
+
+            this.$nextTick(() => {
+                this.errors.clear();
+            });
+        },
         validateCreateProject() {
-            this.$validator.validateAll().then(res => {
+            let keys = [];
+
+            Object.keys(this.forms.newProject).forEach(k => {
+                keys.push(`new-${k}`);
+            });
+
+            this.$validator.validateAll(keys).then(res => {
                 if(res) {
                     this.createProject();
+                }
+            });
+        },
+        validateUpdateProject() {
+            let keys = [];
+
+            Object.keys(this.forms.newProject).forEach(k => {
+                keys.push(`edit-${k}`);
+            });
+
+            this.$validator.validateAll(keys).then(res => {
+                if(res) {
+                    this.updateProject();
                 }
             });
         },
@@ -116,6 +181,61 @@ Vue.component('projects-list', {
                     }
                 }
             });
+        },
+        updateProject() {
+            this.formErrors.editProject = null;
+            this.http.updatingProject = true;
+
+            this.$http.put(`/ajax/projects/${this.forms.editProject.id}`, this.forms.editProject).then(res => {
+                this.http.updatingProject = false;
+                this.closeEditProjectModal();
+                this.swapProject(res.data.data);
+            }).catch(res => {
+                this.http.updatingProject = false;
+
+                if(res.response && res.response.data) {
+                    if(res.response.data.errors) {
+                        this.formErrors.editProject = res.response.data.errors;
+                    }
+                }
+            });
+        },
+        swapProject(project) {
+            this.mProjects = this.mProjects.map(p => {
+                if(p.id === project.id) {
+                    p = project;
+                }
+
+                return p;
+            });
+        },
+        removeLocalProject(id) {
+            this.mProjects = this.mProjects.filter(p => {
+                return p.id !== id;
+            });
+        },
+        confirmDelete(id) {
+            swal({
+                title: 'Delete Project',
+                type: 'warning',
+                text: 'Are you sure you want to permanently delete this project?',
+                showCancelButton: true,
+                showLoaderOnConfirm: true,
+                preConfirm: (res) => {
+                    return new Promise((resolve) => {
+                        this.deleteProject(id).then(res2 => {
+                            resolve();
+                        }).catch(res2 => {
+                            resolve();
+                        });
+                    });
+                }
+            }).then(res => {
+                this.removeLocalProject(id);
+            })
+        },
+        deleteProject(id) {
+            return this.$http.delete(`/ajax/projects/${id}`);
         }
     },
     computed: {

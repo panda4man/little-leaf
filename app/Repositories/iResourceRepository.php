@@ -26,9 +26,10 @@ interface iResourceRepository
      *
      * @param integer $id
      * @param array $fields
+     * @param array $relations
      * @return bool
      */
-    public function update(int $id, array $fields = []);
+    public function update(int $id, array $fields = [], ...$relations);
 
     /**
      * Delete a resource

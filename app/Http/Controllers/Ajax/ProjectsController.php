@@ -75,7 +75,13 @@ class ProjectsController extends Controller
      */
     public function update(Project $project, UpdateProjectRequest $req, ProjectRepository $repo)
     {
-        $success = $repo->update($project->id, $req->all());
+        $client = null;
+
+        if($req->has('client_id')) {
+            $client = Client::find($req->get('client_id'));
+        }
+
+        $success = $repo->update($project->id, $req->all(), $client);
 
         if($success) {
             $project = $repo->find($project->id);
@@ -110,12 +116,12 @@ class ProjectsController extends Controller
             } else {
                 return response()->json([
                     'success' => false,
-                ]);
+                ], 400);
             }
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-            ]);
+            ], 400);
         }
     }
 }

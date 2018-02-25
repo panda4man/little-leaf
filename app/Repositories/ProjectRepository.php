@@ -52,9 +52,10 @@ class ProjectRepository implements iResourceRepository
      *
      * @param integer $id
      * @param array $fields
+     * @param array $relations
      * @return bool
      */
-    public function update(int $id, array $fields = [])
+    public function update(int $id, array $fields = [], ...$relations)
     {
         $success = false;
         $project = $this->find($id);
@@ -67,6 +68,16 @@ class ProjectRepository implements iResourceRepository
             $success = $project->update($fields);
         } catch(\Exception $e) {
             \Log::error($e->getMessage());
+        }
+
+        if($success) {
+            foreach($relations as $rel) {
+                if($rel instanceof Client) {
+                    $project->client()->associate($rel);
+                }
+            }
+
+            $project->save();
         }
 
         return $success;

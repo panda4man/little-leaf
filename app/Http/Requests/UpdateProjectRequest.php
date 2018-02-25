@@ -25,7 +25,7 @@ class UpdateProjectRequest extends FormRequest
     {
         return [
             'name'         => 'required',
-            'due_at'       => 'date_format:Y-m-d',
+            'due_at'       => 'nullable|date_format:Y-m-d',
             'completed_at' => 'date_format:Y-m-d',
         ];
     }

@@ -26,6 +26,7 @@ class ProjectTransformer extends TransformerAbstract
 
         $data = [
             'id'              => $project->id,
+            'client_id'       => $project->client_id,
             'name'            => $project->name,
             'estimated_cost'  => $project->estimated_cost,
             'estimated_hours' => $project->estimated_hours,

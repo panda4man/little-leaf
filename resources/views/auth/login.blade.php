@@ -1,6 +1,6 @@
 @extends('layouts.main')
 
-@section('title', 'Login')
+@section('title', 'Login | ')
 
 @section('content')
     <login :form-errors="{{$errors}}" inline-template>
