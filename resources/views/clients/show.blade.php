@@ -28,7 +28,11 @@
                                 <hours-worked :project="props.item">
                                 </hours-worked>
                             </td>
-                            <td>$@{{ props.item.estimated_cost }}</td>
+                            <td>
+                                <span v-if="props.item.estimated_cost">
+                                    $@{{ props.item.estimated_cost }}
+                                </span>
+                            </td>
                             <td>
                                 <span v-if="props.item.due_at">@{{ props.item.due_at_moment.format('MMM Do, YYYY') }}</span>
                             </td>
