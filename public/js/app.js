@@ -74581,7 +74581,9 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('projects-list', {
                     });
                 }
             }).then(function (res) {
-                _this8.removeLocalProject(id);
+                if (res.value) {
+                    _this8.removeLocalProject(id);
+                }
             });
         },
         deleteProject: function deleteProject(id) {
