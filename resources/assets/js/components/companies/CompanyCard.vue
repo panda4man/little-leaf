@@ -1,5 +1,5 @@
 <template>
-    <v-card>
+    <v-card class="company-card">
         <template v-if="company">
             <v-card-text>
                 <v-layout row>
@@ -8,18 +8,32 @@
                     </v-flex>
                     <v-flex xs12 sm8 md9>
                         <div class="pl-3">
-                            <h1>{{ company.name }}</h1>
+                            <div class="name d-flex">
+                                <div>
+                                    {{ company.name }}
+                                </div>
+                                <v-spacer></v-spacer>
+                                <div class="text-xs-right">
+                                    <v-menu offset-y>
+                                        <v-btn slot="activator" icon><v-icon>more_vert</v-icon></v-btn>
+                                        <v-list>
+                                            <v-list-tile @click="tryToEdit">
+                                                <v-list-tile-content>
+                                                    Edit
+                                                </v-list-tile-content>
+                                            </v-list-tile>
+                                            <v-list-tile @click="tryToDestroy">
+                                                <v-list-tile-content>
+                                                    Delete
+                                                </v-list-tile-content>
+                                            </v-list-tile>
+                                        </v-list>
+                                    </v-menu>
+                                </div>
+                            </div>
                             <div>{{ company.address }}</div>
                             <div>{{ company.city }}, {{ company.state }} {{ company.zip }}</div>
                             <div>{{ company.country }}</div>
-                        </div>
-                        <div>
-                            <v-btn @click="tryToEdit" color="success">
-                                Edit<v-icon right>edit</v-icon>
-                            </v-btn>
-                            <v-btn @click="tryToDestroy" color="warning">
-                                Delete<v-icon right>delete</v-icon>
-                            </v-btn>
                         </div>
                     </v-flex>
                 </v-layout>

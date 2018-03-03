@@ -48,23 +48,34 @@ class WorkRepository implements iResourceRepository
     /**
      * Update a resource
      *
-     * @param integer $id
+     * @param mixed $identifier
      * @param array $fields
+     * @param array $relations
      * @return bool
      */
-    public function update(int $id, array $fields = [])
+    public function update($identifier, array $fields = [], ...$relations): bool
     {
         $success = false;
-        $work = $this->find($id);
+        $work = null;
+
+        if($identifier instanceof Work) {
+            $work = $identifier;
+        } else {
+            $work = Work::find($identifier);
+        }
 
         if(!$work) {
             return $success;
         }
 
-        try {
-            $success = $work->update($fields);
-        } catch(\Exception $e) {
-            \Log::error($e->getMessage());
+        $success = $work->update($fields);
+
+        if($success) {
+            foreach($relations as $rel) {
+                if($rel instanceof Task) {
+                    $work->task()->associate($rel);
+                }
+            }
         }
 
         return $success;

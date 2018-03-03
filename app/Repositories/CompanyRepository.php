@@ -61,23 +61,36 @@ class CompanyRepository implements iResourceRepository
     /**
      * Update a resource
      *
-     * @param integer $id
+     * @param mixed $identifier
      * @param array $fields
+     * @param array $relations
      * @return bool
      */
-    public function update(int $id, array $fields = [])
+    public function update($identifier, array $fields = [], ...$relations): bool
     {
         $success = false;
-        $company = $this->find($id);
+        $company = null;
+
+        if($identifier instanceof Company) {
+            $company = $identifier;
+        } else {
+            $company = Company::find($identifier);
+        }
 
         if(!$company) {
             return $success;
         }
 
-        try {
-            $success = $company->update($fields);
-        } catch(\Exception $e) {
-            \Log::error($e->getMessage());
+        $success = $company->update($fields);
+
+        if($success) {
+            foreach($relations as $rel) {
+                if($rel instanceof User) {
+                    $company->owner()->associate($rel);
+                }
+            }
+
+            $company->save();
         }
 
         return $success;

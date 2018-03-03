@@ -2,3 +2,12 @@
   display: none;
 }
 
+html,
+body {
+  font-family: Roboto, sans-serif;
+}
+
+.company-card .name {
+  font-size: 1.5em;
+}
+

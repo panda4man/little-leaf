@@ -33,6 +33,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     // Projects
     Route::get('/projects', 'ProjectsController@index');
+    Route::get('/projects/{project}', 'ProjectsController@show');
 
     // Ajax Routes
     Route::group(['prefix' => 'ajax', 'namespace' => 'Ajax'], function () {
@@ -42,15 +43,17 @@ Route::group(['middleware' => 'auth'], function () {
         Route::put('/companies/{company}', 'CompaniesController@update');
 
         // Clients
-        Route::post('/clients', 'ClientsController@store');
+        Route::apiResource('/clients', 'ClientsController', ['only' => ['index', 'store', 'update', 'destroy']]);
+
+        // Deliverables
+        Route::get('/deliverables/{deliverable}/hours-worked', 'DeliverablesController@getWorkDone');
+        Route::apiResource('/deliverables', 'DeliverablesController', ['only' => ['store', 'update', 'destroy']]);
 
         // Tasks
         Route::apiResource('/tasks', 'TasksController', ['only' => ['store', 'update', 'destroy']]);
 
         // Work
-        Route::post('/work', 'WorkController@store');
-        Route::put('/work/{work}', 'WorkController@update');
-        Route::delete('/work/{work}', 'WorkController@destroy');
+        Route::apiResource('/work', 'WorkController', ['only' => ['store', 'update', 'destroy']]);
 
         // Projects
         Route::get('/projects/{project}/hours-worked', 'ProjectsController@getWorkDone');

@@ -24,12 +24,12 @@ interface iResourceRepository
     /**
      * Update a resource
      *
-     * @param integer $id
+     * @param $identifier
      * @param array $fields
      * @param array $relations
      * @return bool
      */
-    public function update(int $id, array $fields = [], ...$relations);
+    public function update($identifier, array $fields = [], ...$relations): bool;
 
     /**
      * Delete a resource

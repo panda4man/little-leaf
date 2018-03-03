@@ -48,23 +48,34 @@ class TaskRepository implements iResourceRepository
     /**
      * Update a resource
      *
-     * @param integer $id
+     * @param mixed $identifier
      * @param array $fields
+     * @param array $relations
      * @return bool
      */
-    public function update(int $id, array $fields = [])
+    public function update($identifier, array $fields = [], ...$relations): bool
     {
         $success = false;
-        $task = $this->find($id);
+        $task = null;
+
+        if($identifier instanceof Task) {
+            $task = $identifier;
+        } else {
+            $task = Task::find($identifier);
+        }
 
         if(!$task) {
             return $success;
         }
 
-        try {
-            $success = $task->update($fields);
-        } catch(\Exception $e) {
-            \Log::error($e->getMessage());
+        $success = $task->update($fields);
+
+        if($success) {
+            foreach($relations as $rel) {
+                if($rel instanceof User) {
+                    $task->user()->associate($rel);
+                }
+            }
         }
 
         return $success;

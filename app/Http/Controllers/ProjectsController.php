@@ -25,7 +25,29 @@ class ProjectsController extends Controller
 
         return view('projects.index')->with([
             'projects' => $projects,
-            'clients' => $clients
+            'clients'  => $clients,
+        ]);
+    }
+
+    /**
+     * @param Project $project
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function show(Project $project)
+    {
+        $clients = Client::orderBy('name')->get();
+        $projectJson = fractal()->item($project, new ProjectTransformer())
+            ->includeDeliverables()
+            ->includeWork()
+            ->toArray();
+        $clientsJson = fractal()->collection($clients, new ClientTransformer())->toArray();
+
+        return view('projects.show', [
+            'project' => $project,
+            'json'    => [
+                'project' => $projectJson,
+                'clients' => $clientsJson,
+            ],
         ]);
     }
 }

@@ -7,6 +7,11 @@ use League\Fractal\TransformerAbstract;
 class DeliverableTransformer extends TransformerAbstract
 {
     /**
+     * @var array
+     */
+    protected $availableIncludes = ['client', 'work'];
+
+    /**
      * A Fractal transformer.
      *
      * @param $deliverable
@@ -22,6 +27,7 @@ class DeliverableTransformer extends TransformerAbstract
 
         $data = [
             'id'              => $deliverable->id,
+            'project_id'      => $deliverable->project_id,
             'name'            => $deliverable->name,
             'description'     => $deliverable->description,
             'estimated_cost'  => $deliverable->estimated_cost,
@@ -31,5 +37,31 @@ class DeliverableTransformer extends TransformerAbstract
         ];
 
         return $data;
+    }
+
+    /**
+     * @param $deliverable
+     * @return \League\Fractal\Resource\Item|\League\Fractal\Resource\NullResource
+     */
+    public function includeClient($deliverable)
+    {
+        if(!$deliverable) {
+            return $this->null();
+        }
+
+        return $this->item($deliverable->client, new ClientTransformer());
+    }
+
+    /**
+     * @param $deliverable
+     * @return \League\Fractal\Resource\Collection|\League\Fractal\Resource\NullResource
+     */
+    public function includeWork($deliverable)
+    {
+        if(!$deliverable) {
+            return $this->null();
+        }
+
+        return $this->collection($deliverable->work, new WorkTransformer());
     }
 }

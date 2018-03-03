@@ -29,41 +29,26 @@
                             :headers="table.headers"
                             :items="filteredProjects">
                         <template slot="items" slot-scope="props">
-                            <td>
-                                <v-menu offset-y>
-                                    <v-btn slot="activator" icon><v-icon>more_vert</v-icon></v-btn>
-                                    <v-list>
-                                        <v-list-tile @click="openEditProjectModal(props.item.id)">
-                                            <v-list-tile-content>
-                                                Edit
-                                            </v-list-tile-content>
-                                        </v-list-tile>
-                                        <v-list-tile @click="confirmDelete(props.item.id)">
-                                            <v-list-tile-content>
-                                                Delete
-                                            </v-list-tile-content>
-                                        </v-list-tile>
-                                    </v-list>
-                                </v-menu>
-                            </td>
-                            <td>@{{ props.item.client.name }}</td>
-                            <td>@{{ props.item.name }}</td>
-                            <td>@{{ props.item.estimated_hours }}</td>
-                            <td>
-                                <hours-worked :project="props.item">
-                                </hours-worked>
-                            </td>
-                            <td>
+                            <tr @click="projectDetails(props.item)">
+                                <td>@{{ props.item.client.name }}</td>
+                                <td>@{{ props.item.name }}</td>
+                                <td>@{{ props.item.estimated_hours }}</td>
+                                <td>
+                                    <hours-worked :project="props.item">
+                                    </hours-worked>
+                                </td>
+                                <td>
                                 <span v-if="props.item.estimated_cost">
                                     $@{{ props.item.estimated_cost }}
                                 </span>
-                            </td>
-                            <td>
-                                <span v-if="props.item.due_at">@{{ props.item.due_at_moment.format('M/DD/YY') }}</span>
-                            </td>
-                            <td>
-                                <span v-if="props.item.completed_at">@{{ props.item.completed_at_moment.format('M/DD/YY') }}</span>
-                            </td>
+                                </td>
+                                <td>
+                                    <span v-if="props.item.due_at">@{{ props.item.due_at_moment.format('M/DD/YY') }}</span>
+                                </td>
+                                <td>
+                                    <span v-if="props.item.completed_at">@{{ props.item.completed_at_moment.format('M/DD/YY') }}</span>
+                                </td>
+                            </tr>
                         </template>
                     </v-data-table>
                 </v-card>
@@ -121,69 +106,6 @@
                             <v-spacer></v-spacer>
                             <v-btn :disabled="http.creatingProject || errors.any()" :loading="http.creatingProject" type="submit" color="success">Create</v-btn>
                             <v-btn :disabled="http.creatingProject" color="success" @click="closeCreateProjectModal" flat>Cancel</v-btn>
-                        </v-card-actions>
-                    </form>
-                </v-card>
-            </v-dialog>
-            <v-dialog v-model="modals.editProject" max-width="550">
-                <v-card tile>
-                    <v-card-title>
-                        <div class="headline">
-                            Edit Project
-                        </div>
-                    </v-card-title>
-                    <form @submit.prevent="validateUpdateProject">
-                        <v-card-text>
-                            <v-container grid-list-md>
-                                <form-errors v-if="formErrors.editProject" :form-errors="formErrors.editProject"></form-errors>
-                                <v-select
-                                        no-data-text="Select client"
-                                        v-validate="'required'"
-                                        label="Client"
-                                        name="client_id"
-                                        data-vv-as="client"
-                                        data-vv-name="edit-client_id"
-                                        :error-messages="errors.collect('edit-client_id')"
-                                        v-model="forms.editProject.client_id"
-                                        :items="clients"
-                                        item-text="name"
-                                        item-value="id"></v-select>
-                                <v-text-field
-                                        v-validate="'required'"
-                                        name="name"
-                                        data-vv-as="name"
-                                        :error-messages="errors.collect('edit-name')"
-                                        data-vv-name="edit-name"
-                                        label="Project Name"
-                                        v-model="forms.editProject.name"></v-text-field>
-                                <v-layout row wrap>
-                                    <v-flex xs12 sm6>
-                                        <v-text-field label="Estimated Hours" v-model="forms.editProject.estimated_hours"></v-text-field>
-                                    </v-flex>
-                                    <v-flex xs12 sm6>
-                                        <v-text-field label="Estimated Cost" v-model="forms.editProject.estimated_cost"></v-text-field>
-                                    </v-flex>
-                                </v-layout>
-                                <div class="d-flex" style="justify-content: space-between">
-                                    <div style="font-size: 1.3em">Due At</div>
-                                    <div style="text-align: right">
-                                        <v-btn @click="clearDueAt(forms.editProject)" flat>Clear</v-btn>
-                                    </div>
-                                </div>
-                                <v-date-picker
-                                        header-color="green lighten-2"
-                                        color="green"
-                                        full-width
-                                        landscape
-                                        class="mt-3"
-                                        v-model="forms.editProject.due_at"
-                                ></v-date-picker>
-                            </v-container>
-                        </v-card-text>
-                        <v-card-actions>
-                            <v-spacer></v-spacer>
-                            <v-btn :disabled="http.updatingProject || errors.any()" :loading="http.updatingProject" type="submit" color="success">Update</v-btn>
-                            <v-btn :disabled="http.updatingProject" color="success" @click="closeEditProjectModal" flat>Cancel</v-btn>
                         </v-card-actions>
                     </form>
                 </v-card>

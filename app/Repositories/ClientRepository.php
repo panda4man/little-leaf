@@ -50,23 +50,36 @@ class ClientRepository implements iResourceRepository
     /**
      * Update a resource
      *
-     * @param integer $id
+     * @param mixed $identifier
      * @param array $fields
+     * @param array $relations
      * @return bool
      */
-    public function update(int $id, array $fields = [])
+    public function update($identifier, array $fields = [], ...$relations): bool
     {
         $success = false;
-        $client = $this->find($id);
+        $client = null;
+
+        if($identifier instanceof Client) {
+            $client = $identifier;
+        } else {
+            $client = Client::find($identifier);
+        }
 
         if(!$client) {
             return $success;
         }
 
-        try {
-            $success = $client->update($fields);
-        } catch(\Exception $e) {
-            \Log::error($e->getMessage());
+        $success = $client->update($fields);
+
+        if($success) {
+            foreach($relations as $rel) {
+                if($rel instanceof Company) {
+                    $client->company()->associate($rel);
+                }
+            }
+
+            $client->save();
         }
 
         return $success;

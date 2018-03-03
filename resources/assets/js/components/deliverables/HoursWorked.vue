@@ -10,7 +10,7 @@
 <script>
     export default {
         props: {
-            project: Object,
+            deliverable: Object,
             suffix: {
                 type: String,
                 default: 'hrs'
@@ -31,7 +31,7 @@
             getHours() {
                 this.http.fetching = true;
 
-                this.$http.get(`/ajax/projects/${this.project.id}/hours-worked`).then(res => {
+                this.$http.get(`/ajax/deliverables/${this.deliverable.id}/hours-worked`).then(res => {
                     this.http.fetching = false;
                     this.hours = res.data.data.hours;
                 }).catch(res => {

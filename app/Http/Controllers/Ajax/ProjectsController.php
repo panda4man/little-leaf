@@ -81,7 +81,7 @@ class ProjectsController extends Controller
             $client = Client::find($req->get('client_id'));
         }
 
-        $success = $repo->update($project->id, $req->all(), $client);
+        $success = $repo->update($project, $req->all(), $client);
 
         if($success) {
             $project = $repo->find($project->id);

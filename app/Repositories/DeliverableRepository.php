@@ -4,10 +4,10 @@
 namespace App\Repositories;
 
 
-use App\Models\Client;
+use App\Models\Deliverable;
 use App\Models\Project;
 
-class ProjectRepository implements iResourceRepository
+class DeliverableRepository implements iResourceRepository
 {
     /**
      * Create a new resource
@@ -18,22 +18,23 @@ class ProjectRepository implements iResourceRepository
      */
     public function create(array $fields = [], ...$relations)
     {
+        $deliverable = null;
+
         try {
-            $project = Project::create($fields);
+            $deliverable = Deliverable::create($fields);
 
             foreach($relations as $rel) {
-                if($rel instanceof Client) {
-                    $project->client()->associate($rel);
+                if($rel instanceof Project) {
+                    $deliverable->project()->associate($rel);
                 }
             }
 
-            $project->save();
-
-            return $project;
+            $deliverable->save();
         } catch (\Exception $e) {
             \Log::error($e->getMessage());
-            return null;
         }
+
+        return $deliverable;
     }
 
     /**
@@ -44,13 +45,13 @@ class ProjectRepository implements iResourceRepository
      */
     public function find(int $id)
     {
-        return Project::find($id);
+        return Deliverable::find($id);
     }
 
     /**
      * Update a resource
      *
-     * @param $identifier
+     * @param mixed $identifier
      * @param array $fields
      * @param array $relations
      * @return bool
@@ -58,28 +59,27 @@ class ProjectRepository implements iResourceRepository
     public function update($identifier, array $fields = [], ...$relations): bool
     {
         $success = false;
-        $project = null;
+        $deliverable = null;
 
-        if($identifier instanceof Project) {
-            $project = $identifier;
+        if($identifier instanceof Deliverable) {
+            $deliverable = $identifier;
         } else {
-            $project = Project::find($identifier);
+            $deliverable = Deliverable::find($identifier);
         }
 
-        if(!$project) {
+        if(is_null($deliverable))
             return $success;
-        }
 
-        $success = $project->update($fields);
+        $success = $deliverable->update($fields);
 
         if($success) {
             foreach($relations as $rel) {
-                if($rel instanceof Client) {
-                    $project->client()->associate($rel);
+                if($rel instanceof Project) {
+                    $deliverable->project()->associate($rel);
                 }
             }
 
-            $project->save();
+            $deliverable->save();
         }
 
         return $success;
@@ -93,12 +93,6 @@ class ProjectRepository implements iResourceRepository
      */
     public function delete(int $id)
     {
-        $project = $this->find($id);
-
-        if($project) {
-            return $project->delete();
-        }
-
-        return true;
+        // TODO: Implement delete() method.
     }
 }

@@ -136,7 +136,7 @@
                         <v-btn :disabled="http.creatingClient || errors.any()" :loading="http.creatingClient" @click.stop="validateCreateClient" color="success">
                             Create
                         </v-btn>
-                        <v-btn @click.stop="closeCreateClientModal">Cancel</v-btn>
+                        <v-btn @click.stop="closeCreateClientModal" flat>Cancel</v-btn>
                     </v-card-actions>
                 </v-card>
             </v-dialog>

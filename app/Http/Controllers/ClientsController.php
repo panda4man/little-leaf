@@ -46,10 +46,13 @@ class ClientsController extends Controller
             ->includeProjects()
             ->includeCompany()
             ->toArray();
+        $companies = Company::orderBy('name')->get();
+        $companies = fractal()->collection($companies, new CompanyTransformer())->toArray();
 
         return view('clients.show', [
-            'client' => $client,
-            'json'   => $clientJson,
+            'client'    => $client,
+            'companies' => $companies,
+            'json'      => $clientJson,
         ]);
     }
 }

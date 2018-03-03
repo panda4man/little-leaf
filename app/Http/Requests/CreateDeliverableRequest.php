@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateProjectRequest extends FormRequest
+class CreateDeliverableRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,6 +25,7 @@ class UpdateProjectRequest extends FormRequest
     {
         return [
             'name'         => 'required',
+            'description'  => 'required|max:255',
             'due_at'       => 'nullable|date_format:Y-m-d',
             'completed_at' => 'nullable|date_format:Y-m-d',
         ];

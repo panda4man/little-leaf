@@ -1671,6 +1671,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['company'],
@@ -1688,6 +1702,63 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }).then(function (res) {
                 if (res.value) {
                     // TODO: delete
+                }
+            });
+        }
+    }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/deliverables/HoursWorked.vue":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: {
+        deliverable: Object,
+        suffix: {
+            type: String,
+            default: 'hrs'
+        }
+    },
+    data: function data() {
+        return {
+            http: {
+                fetching: false
+            },
+            hours: 0
+        };
+    },
+    mounted: function mounted() {
+        this.getHours();
+    },
+
+    methods: {
+        getHours: function getHours() {
+            var _this = this;
+
+            this.http.fetching = true;
+
+            this.$http.get('/ajax/deliverables/' + this.deliverable.id + '/hours-worked').then(function (res) {
+                _this.http.fetching = false;
+                _this.hours = res.data.data.hours;
+            }).catch(function (res) {
+                _this.http.fetching = false;
+
+                if (res.response) {
+                    console.log(res.response);
                 }
             });
         }
@@ -44600,6 +44671,40 @@ module.exports = function normalizeComponent (
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-0800071b\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/deliverables/HoursWorked.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    { staticClass: "d-flex" },
+    [
+      _vm.http.fetching
+        ? _vm._t("default", [
+            _c("v-progress-circular", {
+              attrs: { indeterminate: "", color: "primary" }
+            })
+          ])
+        : _c("span", [_vm._v(_vm._s(_vm.hours) + " " + _vm._s(_vm.suffix))])
+    ],
+    2
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-0800071b", module.exports)
+  }
+}
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-198be65c\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/companies/CompanyCard.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -44609,6 +44714,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "v-card",
+    { staticClass: "company-card" },
     [
       _vm.company
         ? [
@@ -44632,7 +44738,78 @@ var render = function() {
                     _vm._v(" "),
                     _c("v-flex", { attrs: { xs12: "", sm8: "", md9: "" } }, [
                       _c("div", { staticClass: "pl-3" }, [
-                        _c("h1", [_vm._v(_vm._s(_vm.company.name))]),
+                        _c(
+                          "div",
+                          { staticClass: "name d-flex" },
+                          [
+                            _c("div", [
+                              _vm._v(
+                                "\n                                " +
+                                  _vm._s(_vm.company.name) +
+                                  "\n                            "
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("v-spacer"),
+                            _vm._v(" "),
+                            _c(
+                              "div",
+                              { staticClass: "text-xs-right" },
+                              [
+                                _c(
+                                  "v-menu",
+                                  { attrs: { "offset-y": "" } },
+                                  [
+                                    _c(
+                                      "v-btn",
+                                      {
+                                        attrs: { slot: "activator", icon: "" },
+                                        slot: "activator"
+                                      },
+                                      [_c("v-icon", [_vm._v("more_vert")])],
+                                      1
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "v-list",
+                                      [
+                                        _c(
+                                          "v-list-tile",
+                                          { on: { click: _vm.tryToEdit } },
+                                          [
+                                            _c("v-list-tile-content", [
+                                              _vm._v(
+                                                "\n                                                Edit\n                                            "
+                                              )
+                                            ])
+                                          ],
+                                          1
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "v-list-tile",
+                                          { on: { click: _vm.tryToDestroy } },
+                                          [
+                                            _c("v-list-tile-content", [
+                                              _vm._v(
+                                                "\n                                                Delete\n                                            "
+                                              )
+                                            ])
+                                          ],
+                                          1
+                                        )
+                                      ],
+                                      1
+                                    )
+                                  ],
+                                  1
+                                )
+                              ],
+                              1
+                            )
+                          ],
+                          1
+                        ),
                         _vm._v(" "),
                         _c("div", [_vm._v(_vm._s(_vm.company.address))]),
                         _vm._v(" "),
@@ -44647,43 +44824,7 @@ var render = function() {
                         ]),
                         _vm._v(" "),
                         _c("div", [_vm._v(_vm._s(_vm.company.country))])
-                      ]),
-                      _vm._v(" "),
-                      _c(
-                        "div",
-                        [
-                          _c(
-                            "v-btn",
-                            {
-                              attrs: { color: "success" },
-                              on: { click: _vm.tryToEdit }
-                            },
-                            [
-                              _vm._v("\n                            Edit"),
-                              _c("v-icon", { attrs: { right: "" } }, [
-                                _vm._v("edit")
-                              ])
-                            ],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "v-btn",
-                            {
-                              attrs: { color: "warning" },
-                              on: { click: _vm.tryToDestroy }
-                            },
-                            [
-                              _vm._v("\n                            Delete"),
-                              _c("v-icon", { attrs: { right: "" } }, [
-                                _vm._v("delete")
-                              ])
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      )
+                      ])
                     ])
                   ],
                   1
@@ -44832,6 +44973,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
+    { staticClass: "d-flex" },
     [
       _vm.http.fetching
         ? _vm._t("default", [
@@ -73797,17 +73939,46 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('clients', {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__projects_HoursWorked_vue__ = __webpack_require__("./resources/assets/js/components/projects/HoursWorked.vue");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__projects_HoursWorked_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__projects_HoursWorked_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__models_project__ = __webpack_require__("./resources/assets/js/models/project.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__errors_FormErrors_vue__ = __webpack_require__("./resources/assets/js/components/errors/FormErrors.vue");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__errors_FormErrors_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__errors_FormErrors_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__models_project__ = __webpack_require__("./resources/assets/js/models/project.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_sweetalert2__ = __webpack_require__("./node_modules/sweetalert2/dist/sweetalert2.all.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_sweetalert2___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_sweetalert2__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_bluebird__ = __webpack_require__("./node_modules/bluebird/js/browser/bluebird.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_bluebird___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_bluebird__);
+
+
+
 
 
 
 
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('client-details', {
-    props: ['client'],
-    components: { HoursWorked: __WEBPACK_IMPORTED_MODULE_1__projects_HoursWorked_vue___default.a },
+    props: ['client', 'states', 'companies'],
+    components: { HoursWorked: __WEBPACK_IMPORTED_MODULE_1__projects_HoursWorked_vue___default.a, FormErrors: __WEBPACK_IMPORTED_MODULE_2__errors_FormErrors_vue___default.a },
     data: function data() {
         return {
+            forms: {
+                editClient: {
+                    company_id: '',
+                    name: '',
+                    address: '',
+                    city: '',
+                    zip: '',
+                    state: '',
+                    country: ''
+                }
+            },
+            formErrors: {
+                editClient: {}
+            },
+            http: {
+                updatingClient: false
+            },
             mClient: this.client,
+            modals: {
+                editClient: false
+            },
             table: {
                 headers: [{
                     text: 'Name',
@@ -73844,9 +74015,114 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('client-details', {
         };
     },
 
+    methods: {
+        updateClient: function updateClient() {
+            var _this = this;
+
+            this.http.updatingClient = true;
+            this.formErrors.editClient = {};
+
+            this.$http.put('/ajax/clients/' + this.mClient.hash_id, this.forms.editClient).then(function (res) {
+                _this.http.updatingClient = false;
+                _this.updateLocalClient(res.data.data);
+                _this.closeEditClientModal();
+            }).catch(function (res) {
+                _this.http.updatingClient = false;
+
+                if (res.response && res.response.data) {
+                    if (res.response.data.errors) {
+                        _this.formErrors.editClient = res.response.data.errors;
+                    }
+                }
+            });
+        },
+        validateUpdateClient: function validateUpdateClient() {
+            var _this2 = this;
+
+            var fields = Object.keys(this.forms.editClient).map(function (k) {
+                return 'edit-client.' + k;
+            });
+
+            this.$validator.validateAll(fields).then(function (res) {
+                if (res) {
+                    _this2.updateClient();
+                }
+            });
+        },
+        openEditClientModal: function openEditClientModal() {
+            var _this3 = this;
+
+            this.modals.editClient = true;
+
+            Object.keys(this.forms.editClient).forEach(function (k) {
+                if (_this3.mClient.hasOwnProperty(k)) {
+                    _this3.forms.editClient[k] = _this3.mClient[k];
+                }
+            });
+        },
+        closeEditClientModal: function closeEditClientModal() {
+            var _this4 = this;
+
+            this.modals.editClient = false;
+            this.http.updatingClient = false;
+
+            Object.keys(this.forms.editClient).forEach(function (k) {
+                _this4.forms.editClient[k] = '';
+            });
+
+            this.$nextTick(function () {
+                _this4.errors.clear();
+            });
+        },
+        deleteClient: function deleteClient(id) {
+            return this.$http.delete('/ajax/clients/' + id);
+        },
+        updateLocalClient: function updateLocalClient(newClient) {
+            this.mClient = newClient;
+        },
+        confirmDeleteClient: function confirmDeleteClient() {
+            var _this5 = this;
+
+            __WEBPACK_IMPORTED_MODULE_4_sweetalert2___default()({
+                title: 'Delete Client',
+                text: 'Are you sure you want to delete this client?',
+                showCancelButton: true,
+                showLoaderOnConfirm: true,
+                preConfirm: function preConfirm() {
+                    return new __WEBPACK_IMPORTED_MODULE_5_bluebird___default.a(function (resolve, reject) {
+                        _this5.deleteClient(_this5.mClient.hash_id).then(function (res2) {
+                            resolve();
+                        }).catch(function (res2) {
+                            reject();
+                        });
+                    });
+                }
+            }).then(function (res) {
+                if (res.value) {
+                    window.location = '/account/clients';
+                }
+            }).catch(function (res) {
+                //handle bad case
+            });
+        }
+    },
     computed: {
         mProjects: function mProjects() {
-            return __WEBPACK_IMPORTED_MODULE_2__models_project__["a" /* default */].hydrate(this.mClient.projects);
+            return __WEBPACK_IMPORTED_MODULE_3__models_project__["a" /* default */].hydrate(this.mClient.projects);
+        },
+        formattedStates: function formattedStates() {
+            var _this6 = this;
+
+            var states = [];
+
+            Object.keys(this.states).forEach(function (k) {
+                states.push({
+                    text: _this6.states[k],
+                    value: k
+                });
+            });
+
+            return states;
         }
     }
 });
@@ -74217,6 +74493,54 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('companies', {
 
 /***/ }),
 
+/***/ "./resources/assets/js/components/deliverables/HoursWorked.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
+/* script */
+var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/deliverables/HoursWorked.vue")
+/* template */
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-0800071b\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/deliverables/HoursWorked.vue")
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/deliverables/HoursWorked.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-0800071b", Component.options)
+  } else {
+    hotAPI.reload("data-v-0800071b", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
 /***/ "./resources/assets/js/components/errors/FormErrors.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -74318,6 +74642,8 @@ module.exports = Component.exports
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__index__ = __webpack_require__("./resources/assets/js/components/projects/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__show__ = __webpack_require__("./resources/assets/js/components/projects/show.js");
+
 
 
 /***/ }),
@@ -74364,23 +74690,16 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('projects-list', {
                     estimated_cost: '',
                     estimated_hours: '',
                     due_at: ''
-                },
-                editProject: {}
+                }
             },
             formErrors: {
-                newProject: null,
-                editProject: null
+                newProject: null
             },
             http: {
-                creatingProject: false,
-                updatingProject: false
+                creatingProject: false
             },
             table: {
                 headers: [{
-                    text: '',
-                    sortable: false,
-                    value: 'name'
-                }, {
                     text: 'Client',
                     align: 'left',
                     sortable: 'true',
@@ -74418,8 +74737,7 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('projects-list', {
                 }]
             },
             modals: {
-                createNewProject: false,
-                editProject: false
+                createNewProject: false
             }
         };
     },
@@ -74441,29 +74759,204 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('projects-list', {
                 _this.errors.clear();
             });
         },
-        openEditProjectModal: function openEditProjectModal(id) {
+        validateCreateProject: function validateCreateProject() {
             var _this2 = this;
 
-            var found = false;
-            this.forms.editProject = {};
+            var keys = [];
 
-            this.mProjects.map(function (p) {
-                if (p.id === id) {
-                    found = true;
-
-                    Object.keys(_this2.forms.newProject).forEach(function (k) {
-                        if (p.hasOwnProperty(k)) {
-                            _this2.$set(_this2.forms.editProject, k, p[k]);
-                        }
-                    });
-
-                    _this2.forms.editProject.id = p.id;
-                }
+            Object.keys(this.forms.newProject).forEach(function (k) {
+                keys.push('new-' + k);
             });
 
-            if (!found) {} else {
-                this.modals.editProject = true;
+            this.$validator.validateAll(keys).then(function (res) {
+                if (res) {
+                    _this2.createProject();
+                }
+            });
+        },
+        createProject: function createProject() {
+            var _this3 = this;
+
+            this.formErrors.newProject = null;
+            this.http.creatingProject = true;
+
+            this.$http.post('/ajax/projects', this.forms.newProject).then(function (res) {
+                _this3.http.creatingProject = false;
+                _this3.closeCreateProjectModal();
+                _this3.mProjects.push(res.data.data);
+            }).catch(function (res) {
+                _this3.http.creatingProject = false;
+
+                if (res.response && res.response.data) {
+                    if (res.response.data.errors) {
+                        _this3.formErrors.newProject = res.response.data.errors;
+                    }
+                }
+            });
+        },
+        projectDetails: function projectDetails(project) {
+            window.location = '/projects/' + project.id;
+        }
+    },
+    computed: {
+        hydratedProjects: function hydratedProjects() {
+            return __WEBPACK_IMPORTED_MODULE_1__models_project__["a" /* default */].hydrate(this.mProjects);
+        },
+        filteredProjects: function filteredProjects() {
+            var _this4 = this;
+
+            return this.hydratedProjects.filter(function (p) {
+                var passes = true;
+
+                if (_this4.filter.clientIds.length) {
+                    passes = _this4.filter.clientIds.indexOf(p.client.id) > -1;
+                }
+
+                if (!passes) return passes;
+
+                return passes;
+            }).filter(function (p) {
+                var passes = false;
+
+                if (_this4.filter.status.completed && p.completed_at) {
+                    passes = true;
+                }
+
+                if (_this4.filter.status.notCompleted && !p.completed_at) {
+                    passes = true;
+                }
+
+                if (!_this4.filter.status.completed && !_this4.filter.status.notCompleted) {
+                    passes = true;
+                }
+
+                return passes;
+            });
+        }
+    }
+});
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/projects/show.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__("./node_modules/vue/dist/vue.common.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__projects_HoursWorked_vue__ = __webpack_require__("./resources/assets/js/components/projects/HoursWorked.vue");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__projects_HoursWorked_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__projects_HoursWorked_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__deliverables_HoursWorked_vue__ = __webpack_require__("./resources/assets/js/components/deliverables/HoursWorked.vue");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__deliverables_HoursWorked_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__deliverables_HoursWorked_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__models_project__ = __webpack_require__("./resources/assets/js/models/project.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_bluebird__ = __webpack_require__("./node_modules/bluebird/js/browser/bluebird.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_bluebird___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_bluebird__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__errors_FormErrors_vue__ = __webpack_require__("./resources/assets/js/components/errors/FormErrors.vue");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__errors_FormErrors_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__errors_FormErrors_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_sweetalert2__ = __webpack_require__("./node_modules/sweetalert2/dist/sweetalert2.all.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_sweetalert2___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_sweetalert2__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__models_deliverable__ = __webpack_require__("./resources/assets/js/models/deliverable.js");
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+
+
+
+
+
+
+
+
+
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('project-details', {
+    components: { HoursWorked: __WEBPACK_IMPORTED_MODULE_1__projects_HoursWorked_vue___default.a, DHoursWorked: __WEBPACK_IMPORTED_MODULE_2__deliverables_HoursWorked_vue___default.a, FormErrors: __WEBPACK_IMPORTED_MODULE_5__errors_FormErrors_vue___default.a },
+    props: ['project', 'clients'],
+    data: function data() {
+        return {
+            http: {
+                updatingProject: false,
+                creatingDeliverable: false
+            },
+            mProject: this.project,
+            mDeliverables: [],
+            forms: {
+                editProject: {},
+                newDeliverable: {
+                    name: '',
+                    description: '',
+                    estimated_hours: '',
+                    estimated_cost: '',
+                    due_at: ''
+                }
+            },
+            formErrors: {
+                editProject: {},
+                createDeliverable: {}
+            },
+            modals: {
+                editProject: false,
+                createDeliverable: false
+            },
+            tables: {
+                deliverables: {
+                    headers: [{
+                        text: 'Name',
+                        sortable: true,
+                        value: 'name'
+                    }, {
+                        text: 'Hours',
+                        sortable: true,
+                        value: 'estimated_hours'
+                    }, {
+                        text: 'Cost',
+                        sortable: true,
+                        value: 'estimated_cost'
+                    }, {
+                        text: 'Worked',
+                        sortable: false,
+                        value: 'hours_worked'
+                    }, {
+                        text: 'Due',
+                        sortable: true,
+                        value: 'due_at'
+                    }, {
+                        text: 'Completed',
+                        sortable: true,
+                        value: 'completed_at'
+                    }]
+                }
             }
+        };
+    },
+    created: function created() {
+        // Dynamically set deliverables if exists
+        if (this.mProject.deliverables) {
+            this.mDeliverables = [].concat(_toConsumableArray(this.mProject.deliverables));
+        }
+    },
+
+    methods: {
+        openEditProjectModal: function openEditProjectModal() {
+            var _this = this;
+
+            this.forms.editProject = {};
+
+            Object.keys(this.mProject).forEach(function (k) {
+                _this.$set(_this.forms.editProject, k, _this.mProject[k]);
+            });
+
+            this.forms.editProject.id = this.mProject.id;
+
+            this.modals.editProject = true;
+        },
+        openCreateDeliverableModal: function openCreateDeliverableModal() {
+            var _this2 = this;
+
+            Object.keys(this.forms.newDeliverable).forEach(function (k) {
+                _this2.forms.newDeliverable[k] = '';
+            });
+
+            this.forms.newDeliverable.project_id = this.mProject.id;
+            this.modals.createDeliverable = true;
         },
         closeEditProjectModal: function closeEditProjectModal() {
             var _this3 = this;
@@ -74478,19 +74971,13 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('projects-list', {
                 _this3.errors.clear();
             });
         },
-        validateCreateProject: function validateCreateProject() {
+        closeCreateDeliverableModal: function closeCreateDeliverableModal() {
             var _this4 = this;
 
-            var keys = [];
+            this.modals.createDeliverable = false;
 
-            Object.keys(this.forms.newProject).forEach(function (k) {
-                keys.push('new-' + k);
-            });
-
-            this.$validator.validateAll(keys).then(function (res) {
-                if (res) {
-                    _this4.createProject();
-                }
+            this.$nextTick(function () {
+                _this4.errors.clear();
             });
         },
         validateUpdateProject: function validateUpdateProject() {
@@ -74498,7 +74985,7 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('projects-list', {
 
             var keys = [];
 
-            Object.keys(this.forms.newProject).forEach(function (k) {
+            Object.keys(this.forms.editProject).forEach(function (k) {
                 keys.push('edit-' + k);
             });
 
@@ -74508,23 +74995,18 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('projects-list', {
                 }
             });
         },
-        createProject: function createProject() {
+        validateCreateDeliverable: function validateCreateDeliverable() {
             var _this6 = this;
 
-            this.formErrors.newProject = null;
-            this.http.creatingProject = true;
+            var keys = [];
 
-            this.$http.post('/ajax/projects', this.forms.newProject).then(function (res) {
-                _this6.http.creatingProject = false;
-                _this6.closeCreateProjectModal();
-                _this6.mProjects.push(res.data.data);
-            }).catch(function (res) {
-                _this6.http.creatingProject = false;
+            Object.keys(this.forms.newDeliverable).forEach(function (k) {
+                keys.push('new-deliverable-' + k);
+            });
 
-                if (res.response && res.response.data) {
-                    if (res.response.data.errors) {
-                        _this6.formErrors.newProject = res.response.data.errors;
-                    }
+            this.$validator.validateAll(keys).then(function (res) {
+                if (res) {
+                    _this6.createDeliverable();
                 }
             });
         },
@@ -74548,32 +75030,45 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('projects-list', {
                 }
             });
         },
-        swapProject: function swapProject(project) {
-            this.mProjects = this.mProjects.map(function (p) {
-                if (p.id === project.id) {
-                    p = project;
-                }
-
-                return p;
-            });
-        },
-        removeLocalProject: function removeLocalProject(id) {
-            this.mProjects = this.mProjects.filter(function (p) {
-                return p.id !== id;
-            });
-        },
-        confirmDelete: function confirmDelete(id) {
+        createDeliverable: function createDeliverable() {
             var _this8 = this;
 
-            __WEBPACK_IMPORTED_MODULE_4_sweetalert2___default()({
+            var data = {};
+            this.http.creatingDeliverable = true;
+
+            Object.keys(this.forms.newDeliverable).forEach(function (k) {
+                data[k] = _this8.forms.newDeliverable[k];
+            });
+
+            this.$http.post('/ajax/deliverables', data).then(function (res) {
+                _this8.http.creatingDeliverable = false;
+                _this8.mDeliverables = [].concat(_toConsumableArray(_this8.mDeliverables), [res.data.data]);
+                _this8.closeCreateDeliverableModal();
+            }).catch(function (res) {
+                _this8.http.creatingDeliverable = false;
+
+                if (res.response && res.response.data) {
+                    if (res.response.data.errors) {
+                        _this8.formErrors.createDeliverable = res.response.data.errors;
+                    }
+                }
+            });
+        },
+        swapProject: function swapProject(project) {
+            this.mProject = project;
+        },
+        confirmDeleteProject: function confirmDeleteProject() {
+            var _this9 = this;
+
+            __WEBPACK_IMPORTED_MODULE_6_sweetalert2___default()({
                 title: 'Delete Project',
                 type: 'warning',
                 text: 'Are you sure you want to permanently delete this project?',
                 showCancelButton: true,
                 showLoaderOnConfirm: true,
                 preConfirm: function preConfirm(res) {
-                    return new __WEBPACK_IMPORTED_MODULE_5_bluebird___default.a(function (resolve) {
-                        _this8.deleteProject(id).then(function (res2) {
+                    return new __WEBPACK_IMPORTED_MODULE_4_bluebird___default.a(function (resolve) {
+                        _this9.deleteProject(_this9.mProject.id).then(function (res2) {
                             resolve();
                         }).catch(function (res2) {
                             resolve();
@@ -74582,48 +75077,23 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('projects-list', {
                 }
             }).then(function (res) {
                 if (res.value) {
-                    _this8.removeLocalProject(id);
+                    window.location = '/projects';
                 }
             });
         },
         deleteProject: function deleteProject(id) {
             return this.$http.delete('/ajax/projects/' + id);
+        },
+        clearDueAt: function clearDueAt(form) {
+            form.due_at = '';
         }
     },
     computed: {
-        hydratedProjects: function hydratedProjects() {
-            return __WEBPACK_IMPORTED_MODULE_1__models_project__["a" /* default */].hydrate(this.mProjects);
+        hydratedProject: function hydratedProject() {
+            return __WEBPACK_IMPORTED_MODULE_3__models_project__["a" /* default */].hydrate(this.mProject);
         },
-        filteredProjects: function filteredProjects() {
-            var _this9 = this;
-
-            return this.hydratedProjects.filter(function (p) {
-                var passes = true;
-
-                if (_this9.filter.clientIds.length) {
-                    passes = _this9.filter.clientIds.indexOf(p.client.id) > -1;
-                }
-
-                if (!passes) return passes;
-
-                return passes;
-            }).filter(function (p) {
-                var passes = false;
-
-                if (_this9.filter.status.completed && p.completed_at) {
-                    passes = true;
-                }
-
-                if (_this9.filter.status.notCompleted && !p.completed_at) {
-                    passes = true;
-                }
-
-                if (!_this9.filter.status.completed && !_this9.filter.status.notCompleted) {
-                    passes = true;
-                }
-
-                return passes;
-            });
+        hydratedDeliverables: function hydratedDeliverables() {
+            return __WEBPACK_IMPORTED_MODULE_7__models_deliverable__["a" /* default */].hydrate(this.mDeliverables);
         }
     }
 });
@@ -74820,6 +75290,77 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('time-sheet', {
         createWork: function createWork() {}
     }
 });
+
+/***/ }),
+
+/***/ "./resources/assets/js/models/deliverable.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moment__ = __webpack_require__("./node_modules/moment/moment.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moment___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_moment__);
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+
+
+var Deliverable = function () {
+    function Deliverable() {
+        var _this = this;
+
+        var attributes = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+        _classCallCheck(this, Deliverable);
+
+        // Inherit from attr object
+        Object.keys(attributes).forEach(function (k) {
+            _this[k] = attributes[k];
+        });
+
+        // Set local variables not passed down from server
+        this.hours_worked = 0;
+    }
+
+    _createClass(Deliverable, [{
+        key: 'due_at_moment',
+        get: function get() {
+            var value = this.due_at;
+
+            if (value) {
+                value = __WEBPACK_IMPORTED_MODULE_0_moment___default()(this.due_at);
+            }
+
+            return value;
+        }
+    }, {
+        key: 'completed_at_moment',
+        get: function get() {
+            var value = this.completed_at;
+
+            if (value) {
+                value = __WEBPACK_IMPORTED_MODULE_0_moment___default.a.utc(value);
+            }
+
+            return value;
+        }
+    }], [{
+        key: 'hydrate',
+        value: function hydrate(data) {
+            if (Array.isArray(data)) {
+                return data.map(function (o) {
+                    return new Deliverable(o);
+                });
+            } else {
+                return new Deliverable(data);
+            }
+        }
+    }]);
+
+    return Deliverable;
+}();
+
+/* harmony default export */ __webpack_exports__["a"] = (Deliverable);
 
 /***/ }),
 

@@ -1,3 +1,9 @@
 [v-cloak] {
   display: none;
 }
+
+html, body {
+  font-family: Roboto, sans-serif;
+}
+
+@import 'company-card';
