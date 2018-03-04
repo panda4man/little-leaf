@@ -8,13 +8,24 @@
             :companies="{{ json_encode($companies) }}" inline-template>
         <v-layout row wrap>
             <v-flex xs12>
-                <v-layout row wrap v-for="c in mCompanies" :key="c.id">
-                    <v-flex xs12>
-                        <company-card
-                                v-on:company-edit="openEditCompanyModal"
-                                :company="c">
-                        </company-card>
-                    </v-flex>
+                <v-layout column>
+                    <template v-if="mCompanies && mCompanies.length">
+                        <v-flex v-for="c in mCompanies" :key="c.id">
+                            <company-card
+                                    v-on:remove="removeLocalCompany"
+                                    v-on:company-edit="openEditCompanyModal"
+                                    :company="c">
+                            </company-card>
+                        </v-flex>
+                    </template>
+                    <template v-else>
+                        <v-flex>
+                            <v-alert type="info" :value="true">
+                                You haven't created any companies yet. Click the green button below to get started.
+                            </v-alert>
+                        </v-flex>
+                    </template>
+                    <v-btn color="success" fixed fab bottom right @click="openCreateCompanyModal"><v-icon>add</v-icon></v-btn>
                 </v-layout>
 
                 {{-- Create Company Modal --}}
@@ -97,7 +108,7 @@
                                             <v-layout row>
                                                 <v-flex xs12 sm12>
                                                     <v-btn @click="openSelectPhotoCreate" color="success">Choose Photo</v-btn>
-                                                    <v-btn @click="clearSelectedPhotoCreate">Clear</v-btn>
+                                                    <v-btn @click="clearSelectedPhotoCreate" flat>Clear</v-btn>
                                                 </v-flex>
                                             </v-layout>
                                         </v-flex>
@@ -110,7 +121,7 @@
                             <v-btn :disabled="http.creatingCompany || errors.any()" :loading="http.creatingCompany" @click.stop="validateCreateCompany" color="success">
                                 Create
                             </v-btn>
-                            <v-btn @click.stop="closeCreateCompanyModal">Cancel</v-btn>
+                            <v-btn @click.stop="closeCreateCompanyModal" flat>Cancel</v-btn>
                         </v-card-actions>
                     </v-card>
                 </v-dialog>

@@ -41,6 +41,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/companies/{id}', 'CompaniesController@show');
         Route::post('/companies', 'CompaniesController@store');
         Route::put('/companies/{company}', 'CompaniesController@update');
+        Route::delete('/companies/{company}', 'CompaniesController@destroy');
 
         // Clients
         Route::apiResource('/clients', 'ClientsController', ['only' => ['index', 'store', 'update', 'destroy']]);

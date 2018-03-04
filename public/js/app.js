@@ -1636,6 +1636,8 @@ module.exports = {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_bluebird__ = __webpack_require__("./node_modules/bluebird/js/browser/bluebird.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_bluebird___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_bluebird__);
 //
 //
 //
@@ -1686,6 +1688,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 
+
+
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['company'],
     methods: {
@@ -1693,17 +1697,34 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.$emit('company-edit', this.company.id);
         },
         tryToDestroy: function tryToDestroy() {
+            var _this = this;
+
             this.$swal({
                 title: 'Delete Company',
                 text: 'Are you sure you want to delete this company? We will hold off permanently deleting for 30 days.',
                 showCancelButton: true,
                 confirmButtonText: 'Yes',
-                cancelButtonText: 'Cancel'
+                cancelButtonText: 'Cancel',
+                showLoaderOnConfirm: true,
+                preConfirm: function preConfirm(res) {
+                    return new __WEBPACK_IMPORTED_MODULE_0_bluebird___default.a(function (resolve, reject) {
+                        _this.deleteProject().then(function (res2) {
+                            resolve();
+                        }).catch(function (res2) {
+                            reject();
+                        });
+                    });
+                }
             }).then(function (res) {
                 if (res.value) {
-                    // TODO: delete
+                    _this.$emit('remove', _this.company.id);
                 }
+            }).catch(function (res) {
+                swal('Uh oh', 'Could not delete the company', 'error');
             });
+        },
+        deleteProject: function deleteProject() {
+            return this.$http.delete('/ajax/companies/' + this.company.hash_id);
         }
     }
 });
@@ -74814,6 +74835,11 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('companies', {
 
             this.clearSelectedPhotoEdit();
             this.errors.clear();
+        },
+        removeLocalCompany: function removeLocalCompany(id) {
+            this.mCompanies = this.mCompanies.filter(function (c) {
+                return c.id !== id;
+            });
         },
         openSelectPhotoCreate: function openSelectPhotoCreate() {
             $('#photo-input-create').trigger('click');

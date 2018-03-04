@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import FormErrors from '../errors/FormErrors.vue';
 import CompanyCard from './CompanyCard.vue';
+import swal from 'sweetalert2';
 
 Vue.component('companies', {
     components: {FormErrors, CompanyCard},
@@ -221,6 +222,11 @@ Vue.component('companies', {
 
             this.clearSelectedPhotoEdit();
             this.errors.clear();
+        },
+        removeLocalCompany(id) {
+            this.mCompanies = this.mCompanies.filter(c => {
+                return c.id !== id;
+            });
         },
         openSelectPhotoCreate() {
             $('#photo-input-create').trigger('click');

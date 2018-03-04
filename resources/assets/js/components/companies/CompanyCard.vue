@@ -48,6 +48,8 @@
 </template>
 
 <script>
+    import Promise from 'bluebird';
+
     export default {
         props: ['company'],
         methods: {
@@ -60,12 +62,27 @@
                     text: 'Are you sure you want to delete this company? We will hold off permanently deleting for 30 days.',
                     showCancelButton: true,
                     confirmButtonText: 'Yes',
-                    cancelButtonText: 'Cancel'
+                    cancelButtonText: 'Cancel',
+                    showLoaderOnConfirm: true,
+                    preConfirm: (res) => {
+                        return new Promise((resolve, reject) => {
+                            this.deleteProject().then(res2 => {
+                                resolve();
+                            }).catch(res2 => {
+                                reject();
+                            });
+                        });
+                    }
                 }).then(res => {
                     if(res.value) {
-                        // TODO: delete
+                        this.$emit('remove', this.company.id);
                     }
+                }).catch(res => {
+                    swal('Uh oh', 'Could not delete the company', 'error');
                 });
+            },
+            deleteProject() {
+                return this.$http.delete(`/ajax/companies/${this.company.hash_id}`);
             }
         }
     }

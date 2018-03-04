@@ -101,4 +101,24 @@ class CompaniesController extends Controller
 
         return response()->json(['success' => false], 400);
     }
+
+    /**
+     * @param Company $company
+     * @param CompanyRepository $repo
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function destroy(Company $company, CompanyRepository $repo)
+    {
+        $success = $repo->delete($company->id);
+
+        if($success) {
+            return response()->json([
+                'success' => true
+            ]);
+        }
+
+        return response()->json([
+            'success' => false
+        ], 400);
+    }
 }
