@@ -42,6 +42,20 @@ class DeliverablesController extends Controller
     }
 
     /**
+     * @param Deliverable $deliverable
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function show(Deliverable $deliverable)
+    {
+        $deliverable = fractal()->item($deliverable, new Deliverable())->toArray();
+
+        return response()->json([
+            'success' => true,
+            'data'    => $deliverable,
+        ]);
+    }
+
+    /**
      * @param CreateDeliverableRequest $req
      * @param DeliverableRepository $repo
      * @param Deliverable $deliverable

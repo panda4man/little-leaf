@@ -49,7 +49,7 @@
                                         <hours-worked :project="hydratedProject" suffix=""></hours-worked>
                                     </v-flex>
                                     <v-flex class="text-xs-center">
-                                        <div class="stat-text">Hours Worked</div>
+                                        <div class="stat-text">Hours</div>
                                     </v-flex>
                                 </v-layout>
                             </v-flex>
@@ -62,9 +62,25 @@
                                 </v-layout>
                             </v-flex>
                         </v-layout>
+                        <v-layout row wrap>
+                            <v-flex class="big-stat" sm6>
+                                <v-layout column>
+                                    <v-flex class="stat-value text-xs-center">
+                                        $@{{ mProject.estimated_cost }}
+                                    </v-flex>
+                                    <v-flex class="text-xs-center stat-text">~ Cost</v-flex>
+                                </v-layout>
+                            </v-flex>
+                            <v-flex class="big-stat" sm6>
+                                <v-layout column>
+                                    <v-flex class="text-xs-center stat-value">@{{ mProject.estimated_hours }}</v-flex>
+                                    <v-flex class="text-xs-center stat-text">~ Hours</v-flex>
+                                </v-layout>
+                            </v-flex>
+                        </v-layout>
                     </v-card-text>
                     <v-card-actions>
-                        <v-btn v-if="!mProject.completed_at" @click="tryMarkComplete" color="green" flat>Mark Complete</v-btn>
+                        <v-btn v-if="!mProject.completed_at" :loading="http.completingProject" @click="tryMarkComplete" color="green" flat>Mark Complete</v-btn>
                     </v-card-actions>
                 </v-card>
             </v-flex>
@@ -72,47 +88,12 @@
             <v-flex sm7 md8 lg9>
                 <v-layout row wrap>
                     <v-flex xs12 sm12 md6 :key="d.id" v-for="d in hydratedDeliverables">
-                        <v-card :class="{'green lighten-5': d.completed_at}">
-                            <v-card-title class="layout d-flex">
-                                <div>
-                                    <div class="headline">
-                                        @{{ d.name }}
-                                    </div>
-                                    <div v-if="d.due_at">
-                                        @{{ d.due_at_moment.format('ddd, MMM Do YYYY') }}
-                                    </div>
-                                </div>
-                                <div class="text-xs-right">
-                                    <v-menu offset-y>
-                                        <v-btn slot="activator" icon><v-icon>more_vert</v-icon></v-btn>
-                                        <v-list>
-                                            <v-list-tile @click="openEditDeliverableModal(d)">
-                                                <v-list-tile-content>
-                                                    Edit
-                                                </v-list-tile-content>
-                                            </v-list-tile>
-                                            <v-list-tile @click="confirmDeleteDeliverable(d)">
-                                                <v-list-tile-content>
-                                                    Delete
-                                                </v-list-tile-content>
-                                            </v-list-tile>
-                                        </v-list>
-                                    </v-menu>
-                                </div>
-                            </v-card-title>
-                            <v-card-text>
-                                <div>
-                                    <span>$@{{d.estimated_cost}}</span>
-                                    <span>@{{ d.estimated_hours }}</span>
-                                </div>
-                                <div v-if="d.description">
-                                    @{{ d.description }}
-                                </div>
-                            </v-card-text>
-                            <v-card-actions>
-                                <v-btn color="success" @click="completeProject(d)" flat>Mark Complete</v-btn>
-                            </v-card-actions>
-                        </v-card>
+                        <deliverable-details
+                                :deliverable="d"
+                                v-on:edit="openEditDeliverableModal"
+                                v-on:update="refreshDeliverable"
+                                v-on:delete="confirmDeleteDeliverable">
+                        </deliverable-details>
                     </v-flex>
                 </v-layout>
             </v-flex>

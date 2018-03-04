@@ -9,15 +9,15 @@
                 <v-card>
                     <v-list dense subheader>
                         <v-subheader>Clients</v-subheader>
-                        <v-list-tile avatar v-for="c in clients" :key="c.id">
+                        <v-list-tile v-for="c in clients" :key="c.id">
                             <v-checkbox hide-details :label="c.name" :value="c.id" v-model="filter.clientIds"></v-checkbox>
                         </v-list-tile>
                         <v-subheader>Status</v-subheader>
                         <v-list-tile>
-                            <v-checkbox label="Completed" v-model="filter.status.completed"></v-checkbox>
+                            <v-checkbox hide-details label="Completed" v-model="filter.status.completed"></v-checkbox>
                         </v-list-tile>
                         <v-list-tile>
-                            <v-checkbox label="Not Completed" v-model="filter.status.notCompleted"></v-checkbox>
+                            <v-checkbox hide-details label="Not Completed" v-model="filter.status.notCompleted"></v-checkbox>
                         </v-list-tile>
                     </v-list>
                 </v-card>

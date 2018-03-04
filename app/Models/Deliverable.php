@@ -12,7 +12,7 @@ class Deliverable extends Model
     /**
      * @var array
      */
-    protected $fillable = ['name', 'estimated_hours', 'description', 'due_at', 'completed_at'];
+    protected $fillable = ['name', 'estimated_cost', 'estimated_hours', 'description', 'due_at', 'completed_at'];
 
     /**
      * @var array

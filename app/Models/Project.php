@@ -32,7 +32,7 @@ class Project extends Model
      */
     public function deliverables()
     {
-        return $this->hasMany(Deliverable::class);
+        return $this->hasMany(Deliverable::class)->orderBy('due_at');
     }
 
     /**

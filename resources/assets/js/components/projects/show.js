@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import HoursWorked from '../projects/HoursWorked.vue';
-import DHoursWorked from '../deliverables/HoursWorked.vue';
+import DeliverableDetails from '../deliverables/Details.vue';
 import FormErrors from '../errors/FormErrors.vue';
 import Project from '../../models/project';
 import Deliverable from "../../models/deliverable";
@@ -8,7 +8,7 @@ import Promise from "bluebird";
 import swal from "sweetalert2";
 
 Vue.component('project-details', {
-    components: {HoursWorked, DHoursWorked, FormErrors},
+    components: {HoursWorked, DeliverableDetails, FormErrors},
     props: ['project', 'clients'],
     data() {
         return {
@@ -16,7 +16,7 @@ Vue.component('project-details', {
                 updatingProject: false,
                 updatingDeliverable: false,
                 creatingDeliverable: false,
-                completedProject: false
+                completingProject: false
             },
             mProject: this.project,
             mDeliverables: [],
@@ -109,7 +109,17 @@ Vue.component('project-details', {
             this.forms.newDeliverable.project_id = this.mProject.id;
             this.modals.createDeliverable = true;
         },
-        openEditDeliverableModal(deliverable) {
+        openEditDeliverableModal(id) {
+            let deliverable = this.mDeliverables.filter(d => {
+                return d.id === id;
+            });
+
+            if(deliverable.length) {
+                deliverable = deliverable[0];
+            } else {
+                return;
+            }
+
             this.modals.editDeliverable = true;
 
             Object.keys(this.forms.editDeliverable).forEach(k => {
@@ -280,7 +290,17 @@ Vue.component('project-details', {
                 }
             })
         },
-        confirmDeleteDeliverable(deliverable) {
+        confirmDeleteDeliverable(id) {
+            let deliverable = this.mDeliverables.filter(d => {
+                return d.id === id;
+            });
+
+            if(deliverable.length) {
+                deliverable = deliverable[0];
+            } else {
+                return;
+            }
+
             swal({
                 title: 'Delete Deliverable',
                 type: 'warning',
@@ -346,17 +366,37 @@ Vue.component('project-details', {
         completeProject() {
             this.http.completingProject = true;
 
-            this.$http.post().then(res => {
+            this.$http.post(`/ajax/projects/${this.mProject.id}/complete`).then(res => {
                 this.http.completingProject = false;
+                this.refreshProject();
             }).catch(res => {
                 this.http.completingProject = false;
+
+                swal('Uh oh', 'Something went wrong completing this project.', 'error');
             });
         },
-        completeDeliverable(deliverable) {
-            this.$http.post(`/ajax/deliverables/${deliverable.id}/complete`).then(res => {
-                //TODO
+        refreshDeliverable(id) {
+            this.$http.get(`/ajax/deliverable/${id}`).then(res => {
+                this.mDeliverables = this.mDeliverables.map(d => {
+                    if(d.id === res.data.data.id) {
+                        d = res.data.data;
+                    }
+
+                    return d;
+                });
             }).catch(res => {
-                //TODO
+                swal('Uh oh', 'Couldn\'t refresh the deliverable', 'error');
+            });
+        },
+        refreshProject() {
+            this.$http.get(`/ajax/projects/${this.mProject.id}`, {
+                params: {
+                    includes: 'deliverables,work'
+                }
+            }).then(res => {
+                 this.mProject = res.data.data;
+            }).catch(res => {
+                swal('Uh oh', 'Could not refresh the project. Try reloading the page.', 'error');
             });
         }
     },

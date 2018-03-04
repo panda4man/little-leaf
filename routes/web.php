@@ -48,7 +48,7 @@ Route::group(['middleware' => 'auth'], function () {
         // Deliverables
         Route::get('/deliverables/{deliverable}/hours-worked', 'DeliverablesController@getWorkDone');
         Route::post('/deliverables/{deliverable}/complete', 'DeliverablesController@postComplete');
-        Route::apiResource('/deliverables', 'DeliverablesController', ['only' => ['store', 'update', 'destroy']]);
+        Route::apiResource('/deliverables', 'DeliverablesController', ['only' => ['store', 'show', 'update', 'destroy']]);
 
         // Tasks
         Route::apiResource('/tasks', 'TasksController', ['only' => ['store', 'update', 'destroy']]);
@@ -58,6 +58,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         // Projects
         Route::get('/projects/{project}/hours-worked', 'ProjectsController@getWorkDone');
-        Route::apiResource('/projects', 'ProjectsController', ['only' => ['store', 'update', 'destroy']]);
+        Route::post('/projects/{project}/complete', 'ProjectsController@postComplete');
+        Route::apiResource('/projects', 'ProjectsController', ['only' => ['store', 'show', 'update', 'destroy']]);
     });
 });

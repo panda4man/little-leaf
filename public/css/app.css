@@ -17,5 +17,15 @@ body {
 
 .project-summary .big-stat .stat-text {
   text-transform: uppercase;
+  opacity: 0.8;
+}
+
+.delivery-summary .big-stat .stat-value {
+  font-size: 2.3em;
+}
+
+.delivery-summary .big-stat .stat-text {
+  text-transform: uppercase;
+  opacity: 0.8;
 }
 
