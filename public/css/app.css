@@ -11,3 +11,11 @@ body {
   font-size: 1.5em;
 }
 
+.project-summary .big-stat .stat-value {
+  font-size: 2.3em;
+}
+
+.project-summary .big-stat .stat-text {
+  text-transform: uppercase;
+}
+

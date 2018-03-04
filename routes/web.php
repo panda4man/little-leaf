@@ -47,6 +47,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         // Deliverables
         Route::get('/deliverables/{deliverable}/hours-worked', 'DeliverablesController@getWorkDone');
+        Route::post('/deliverables/{deliverable}/complete', 'DeliverablesController@postComplete');
         Route::apiResource('/deliverables', 'DeliverablesController', ['only' => ['store', 'update', 'destroy']]);
 
         // Tasks

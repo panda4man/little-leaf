@@ -44723,7 +44723,7 @@ var render = function() {
               [
                 _c(
                   "v-layout",
-                  { attrs: { row: "" } },
+                  { attrs: { row: "", wrap: "" } },
                   [
                     _c("v-flex", { attrs: { xs12: "", sm4: "", md3: "" } }, [
                       _c("img", {
@@ -74848,14 +74848,18 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('projects-list', {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__projects_HoursWorked_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__projects_HoursWorked_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__deliverables_HoursWorked_vue__ = __webpack_require__("./resources/assets/js/components/deliverables/HoursWorked.vue");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__deliverables_HoursWorked_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__deliverables_HoursWorked_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__models_project__ = __webpack_require__("./resources/assets/js/models/project.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_bluebird__ = __webpack_require__("./node_modules/bluebird/js/browser/bluebird.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_bluebird___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_bluebird__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__errors_FormErrors_vue__ = __webpack_require__("./resources/assets/js/components/errors/FormErrors.vue");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__errors_FormErrors_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__errors_FormErrors_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_sweetalert2__ = __webpack_require__("./node_modules/sweetalert2/dist/sweetalert2.all.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_sweetalert2___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_sweetalert2__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__models_deliverable__ = __webpack_require__("./resources/assets/js/models/deliverable.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__errors_FormErrors_vue__ = __webpack_require__("./resources/assets/js/components/errors/FormErrors.vue");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__errors_FormErrors_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__errors_FormErrors_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__models_project__ = __webpack_require__("./resources/assets/js/models/project.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__models_deliverable__ = __webpack_require__("./resources/assets/js/models/deliverable.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_bluebird__ = __webpack_require__("./node_modules/bluebird/js/browser/bluebird.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_bluebird___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_bluebird__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_sweetalert2__ = __webpack_require__("./node_modules/sweetalert2/dist/sweetalert2.all.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_sweetalert2___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_sweetalert2__);
+var _methods;
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 
@@ -74868,13 +74872,15 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
 
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('project-details', {
-    components: { HoursWorked: __WEBPACK_IMPORTED_MODULE_1__projects_HoursWorked_vue___default.a, DHoursWorked: __WEBPACK_IMPORTED_MODULE_2__deliverables_HoursWorked_vue___default.a, FormErrors: __WEBPACK_IMPORTED_MODULE_5__errors_FormErrors_vue___default.a },
+    components: { HoursWorked: __WEBPACK_IMPORTED_MODULE_1__projects_HoursWorked_vue___default.a, DHoursWorked: __WEBPACK_IMPORTED_MODULE_2__deliverables_HoursWorked_vue___default.a, FormErrors: __WEBPACK_IMPORTED_MODULE_3__errors_FormErrors_vue___default.a },
     props: ['project', 'clients'],
     data: function data() {
         return {
             http: {
                 updatingProject: false,
-                creatingDeliverable: false
+                updatingDeliverable: false,
+                creatingDeliverable: false,
+                completedProject: false
             },
             mProject: this.project,
             mDeliverables: [],
@@ -74886,15 +74892,25 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('project-details', {
                     estimated_hours: '',
                     estimated_cost: '',
                     due_at: ''
+                },
+                editDeliverable: {
+                    project_id: '',
+                    name: '',
+                    description: '',
+                    estimated_hours: '',
+                    estimated_cost: '',
+                    due_at: ''
                 }
             },
             formErrors: {
                 editProject: {},
-                createDeliverable: {}
+                createDeliverable: {},
+                editDeliverable: {}
             },
             modals: {
                 editProject: false,
-                createDeliverable: false
+                createDeliverable: false,
+                editDeliverable: false
             },
             tables: {
                 deliverables: {
@@ -74934,7 +74950,7 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('project-details', {
         }
     },
 
-    methods: {
+    methods: (_methods = {
         openEditProjectModal: function openEditProjectModal() {
             var _this = this;
 
@@ -74958,142 +74974,269 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('project-details', {
             this.forms.newDeliverable.project_id = this.mProject.id;
             this.modals.createDeliverable = true;
         },
-        closeEditProjectModal: function closeEditProjectModal() {
+        openEditDeliverableModal: function openEditDeliverableModal(deliverable) {
             var _this3 = this;
 
-            this.modals.editProject = false;
+            this.modals.editDeliverable = true;
 
-            Object.keys(this.forms.editProject).forEach(function (k) {
-                _this3.forms.editProject[k] = '';
+            Object.keys(this.forms.editDeliverable).forEach(function (k) {
+                if (deliverable.hasOwnProperty(k)) {
+                    _this3.forms.editDeliverable[k] = deliverable[k];
+                }
             });
 
-            this.$nextTick(function () {
-                _this3.errors.clear();
-            });
+            this.forms.editDeliverable.id = deliverable.id;
         },
-        closeCreateDeliverableModal: function closeCreateDeliverableModal() {
+        closeEditDeliverableModal: function closeEditDeliverableModal() {
             var _this4 = this;
 
-            this.modals.createDeliverable = false;
+            this.modals.editDeliverable = false;
 
             this.$nextTick(function () {
                 _this4.errors.clear();
             });
         },
-        validateUpdateProject: function validateUpdateProject() {
+        closeEditProjectModal: function closeEditProjectModal() {
             var _this5 = this;
 
-            var keys = [];
+            this.modals.editProject = false;
 
-            Object.keys(this.forms.editProject).forEach(function (k) {
-                keys.push('edit-' + k);
-            });
-
-            this.$validator.validateAll(keys).then(function (res) {
-                if (res) {
-                    _this5.updateProject();
-                }
+            this.$nextTick(function () {
+                _this5.errors.clear();
             });
         },
-        validateCreateDeliverable: function validateCreateDeliverable() {
+        closeCreateDeliverableModal: function closeCreateDeliverableModal() {
             var _this6 = this;
 
-            var keys = [];
+            this.modals.createDeliverable = false;
 
-            Object.keys(this.forms.newDeliverable).forEach(function (k) {
-                keys.push('new-deliverable-' + k);
+            this.$nextTick(function () {
+                _this6.errors.clear();
             });
+        }
+    }, _defineProperty(_methods, 'closeEditDeliverableModal', function closeEditDeliverableModal() {
+        var _this7 = this;
 
-            this.$validator.validateAll(keys).then(function (res) {
-                if (res) {
-                    _this6.createDeliverable();
+        this.modals.editDeliverable = false;
+
+        this.$nextTick(function () {
+            _this7.errors.clear();
+        });
+    }), _defineProperty(_methods, 'validateUpdateProject', function validateUpdateProject() {
+        var _this8 = this;
+
+        var keys = [];
+
+        Object.keys(this.forms.editProject).forEach(function (k) {
+            keys.push('edit-' + k);
+        });
+
+        this.$validator.validateAll(keys).then(function (res) {
+            if (res) {
+                _this8.updateProject();
+            }
+        });
+    }), _defineProperty(_methods, 'validateCreateDeliverable', function validateCreateDeliverable() {
+        var _this9 = this;
+
+        var keys = [];
+
+        Object.keys(this.forms.newDeliverable).forEach(function (k) {
+            keys.push('new-deliverable-' + k);
+        });
+
+        this.$validator.validateAll(keys).then(function (res) {
+            if (res) {
+                _this9.createDeliverable();
+            }
+        });
+    }), _defineProperty(_methods, 'validateEditDeliverable', function validateEditDeliverable() {
+        var _this10 = this;
+
+        var keys = [];
+
+        Object.keys(this.forms.editDeliverable).forEach(function (k) {
+            keys.push('edit-deliverable-' + k);
+        });
+
+        this.$validator.validateAll(keys).then(function (res) {
+            if (res) {
+                _this10.updateDeliverable(_this10.forms.editDeliverable.id);
+            }
+        });
+    }), _defineProperty(_methods, 'updateProject', function updateProject() {
+        var _this11 = this;
+
+        this.formErrors.editProject = null;
+        this.http.updatingProject = true;
+
+        this.$http.put('/ajax/projects/' + this.forms.editProject.id, this.forms.editProject).then(function (res) {
+            _this11.http.updatingProject = false;
+            _this11.closeEditProjectModal();
+            _this11.swapProject(res.data.data);
+        }).catch(function (res) {
+            _this11.http.updatingProject = false;
+
+            if (res.response && res.response.data) {
+                if (res.response.data.errors) {
+                    _this11.formErrors.editProject = res.response.data.errors;
                 }
-            });
-        },
-        updateProject: function updateProject() {
-            var _this7 = this;
+            }
+        });
+    }), _defineProperty(_methods, 'createDeliverable', function createDeliverable() {
+        var _this12 = this;
 
-            this.formErrors.editProject = null;
-            this.http.updatingProject = true;
+        var data = {};
+        this.http.creatingDeliverable = true;
 
-            this.$http.put('/ajax/projects/' + this.forms.editProject.id, this.forms.editProject).then(function (res) {
-                _this7.http.updatingProject = false;
-                _this7.closeEditProjectModal();
-                _this7.swapProject(res.data.data);
-            }).catch(function (res) {
-                _this7.http.updatingProject = false;
+        Object.keys(this.forms.newDeliverable).forEach(function (k) {
+            data[k] = _this12.forms.newDeliverable[k];
+        });
 
-                if (res.response && res.response.data) {
-                    if (res.response.data.errors) {
-                        _this7.formErrors.editProject = res.response.data.errors;
-                    }
+        this.$http.post('/ajax/deliverables', data).then(function (res) {
+            _this12.http.creatingDeliverable = false;
+            _this12.mDeliverables = [].concat(_toConsumableArray(_this12.mDeliverables), [res.data.data]);
+            _this12.closeCreateDeliverableModal();
+        }).catch(function (res) {
+            _this12.http.creatingDeliverable = false;
+
+            if (res.response && res.response.data) {
+                if (res.response.data.errors) {
+                    _this12.formErrors.createDeliverable = res.response.data.errors;
                 }
-            });
-        },
-        createDeliverable: function createDeliverable() {
-            var _this8 = this;
+            }
+        });
+    }), _defineProperty(_methods, 'updateDeliverable', function updateDeliverable(id) {
+        var _this13 = this;
 
-            var data = {};
-            this.http.creatingDeliverable = true;
+        var data = {};
+        this.http.updatingDeliverable = true;
 
-            Object.keys(this.forms.newDeliverable).forEach(function (k) {
-                data[k] = _this8.forms.newDeliverable[k];
-            });
+        Object.keys(this.forms.editDeliverable).forEach(function (k) {
+            data[k] = _this13.forms.editDeliverable[k];
+        });
 
-            this.$http.post('/ajax/deliverables', data).then(function (res) {
-                _this8.http.creatingDeliverable = false;
-                _this8.mDeliverables = [].concat(_toConsumableArray(_this8.mDeliverables), [res.data.data]);
-                _this8.closeCreateDeliverableModal();
-            }).catch(function (res) {
-                _this8.http.creatingDeliverable = false;
-
-                if (res.response && res.response.data) {
-                    if (res.response.data.errors) {
-                        _this8.formErrors.createDeliverable = res.response.data.errors;
-                    }
+        this.$http.put('/ajax/deliverables/' + id, data).then(function (res) {
+            _this13.http.updatingDeliverable = false;
+            _this13.mDeliverables = _this13.mDeliverables.map(function (d) {
+                if (res.data.data.id === d.id) {
+                    d = res.data.data;
                 }
-            });
-        },
-        swapProject: function swapProject(project) {
-            this.mProject = project;
-        },
-        confirmDeleteProject: function confirmDeleteProject() {
-            var _this9 = this;
 
-            __WEBPACK_IMPORTED_MODULE_6_sweetalert2___default()({
-                title: 'Delete Project',
-                type: 'warning',
-                text: 'Are you sure you want to permanently delete this project?',
-                showCancelButton: true,
-                showLoaderOnConfirm: true,
-                preConfirm: function preConfirm(res) {
-                    return new __WEBPACK_IMPORTED_MODULE_4_bluebird___default.a(function (resolve) {
-                        _this9.deleteProject(_this9.mProject.id).then(function (res2) {
-                            resolve();
-                        }).catch(function (res2) {
-                            resolve();
-                        });
+                return d;
+            });
+            _this13.closeEditDeliverableModal();
+        }).catch(function (res) {
+            _this13.http.updatingDeliverable = false;
+
+            if (res.response && res.response.data) {
+                if (res.response.data.errors) {
+                    _this13.formErrors.editDeliverable = res.response.data.errors;
+                }
+            }
+        });
+    }), _defineProperty(_methods, 'swapProject', function swapProject(project) {
+        this.mProject = project;
+    }), _defineProperty(_methods, 'confirmDeleteProject', function confirmDeleteProject() {
+        var _this14 = this;
+
+        __WEBPACK_IMPORTED_MODULE_7_sweetalert2___default()({
+            title: 'Delete Project',
+            type: 'warning',
+            text: 'Are you sure you want to permanently delete this project?',
+            showCancelButton: true,
+            showLoaderOnConfirm: true,
+            preConfirm: function preConfirm(res) {
+                return new __WEBPACK_IMPORTED_MODULE_6_bluebird___default.a(function (resolve) {
+                    _this14.deleteProject(_this14.mProject.id).then(function (res2) {
+                        resolve();
+                    }).catch(function (res2) {
+                        resolve();
                     });
-                }
+                });
+            }
+        }).then(function (res) {
+            if (res.value) {
+                window.location = '/projects';
+            }
+        });
+    }), _defineProperty(_methods, 'confirmDeleteDeliverable', function confirmDeleteDeliverable(deliverable) {
+        var _this15 = this;
+
+        __WEBPACK_IMPORTED_MODULE_7_sweetalert2___default()({
+            title: 'Delete Deliverable',
+            type: 'warning',
+            text: 'Are you sure you want to permanently delete this deliverable?',
+            showCancelButton: true,
+            showLoaderOnConfirm: true,
+            preConfirm: function preConfirm(res) {
+                return new __WEBPACK_IMPORTED_MODULE_6_bluebird___default.a(function (resolve, reject) {
+                    _this15.deleteDeliverable(deliverable.id).then(function (res2) {
+                        resolve();
+                    }).catch(function (res2) {
+                        reject();
+                    });
+                });
+            }
+        }).then(function (res) {
+            if (res.value) {
+                _this15.removeLocalDeliverable(deliverable.id);
+            }
+        }).catch(function (res) {
+            __WEBPACK_IMPORTED_MODULE_7_sweetalert2___default()('Uh oh', 'An error occurred when deleting your deliverable.', 'error');
+        });
+    }), _defineProperty(_methods, 'removeLocalDeliverable', function removeLocalDeliverable(id) {
+        this.mDeliverables = this.mDeliverables.filter(function (d) {
+            return d.id !== id;
+        });
+    }), _defineProperty(_methods, 'deleteProject', function deleteProject(id) {
+        return this.$http.delete('/ajax/projects/' + id);
+    }), _defineProperty(_methods, 'deleteDeliverable', function deleteDeliverable(id) {
+        return this.$http.delete('/ajax/deliverables/' + id);
+    }), _defineProperty(_methods, 'clearDueAt', function clearDueAt(form) {
+        form.due_at = '';
+    }), _defineProperty(_methods, 'tryMarkComplete', function tryMarkComplete() {
+        var _this16 = this;
+
+        var can = this.checkMarkComplete();
+
+        if (can) {
+            this.completeProject();
+        } else {
+            __WEBPACK_IMPORTED_MODULE_7_sweetalert2___default()({
+                title: 'Are you sure?',
+                text: 'You haven\'t completed all of your deliverables yet.',
+                type: 'warning',
+                showCancelButton: true
             }).then(function (res) {
                 if (res.value) {
-                    window.location = '/projects';
+                    _this16.completeProject();
                 }
             });
-        },
-        deleteProject: function deleteProject(id) {
-            return this.$http.delete('/ajax/projects/' + id);
-        },
-        clearDueAt: function clearDueAt(form) {
-            form.due_at = '';
         }
-    },
+    }), _defineProperty(_methods, 'checkMarkComplete', function checkMarkComplete() {
+        var passCount = this.mDeliverables.filter(function (d) {
+            return d.completed_at;
+        });
+
+        return passCount.length > 0;
+    }), _defineProperty(_methods, 'completeProject', function completeProject() {
+        var _this17 = this;
+
+        this.http.completingProject = true;
+
+        this.$http.post().then(function (res) {
+            _this17.http.completingProject = false;
+        }).catch(function (res) {
+            _this17.http.completingProject = false;
+        });
+    }), _methods),
     computed: {
         hydratedProject: function hydratedProject() {
-            return __WEBPACK_IMPORTED_MODULE_3__models_project__["a" /* default */].hydrate(this.mProject);
+            return __WEBPACK_IMPORTED_MODULE_4__models_project__["a" /* default */].hydrate(this.mProject);
         },
         hydratedDeliverables: function hydratedDeliverables() {
-            return __WEBPACK_IMPORTED_MODULE_7__models_deliverable__["a" /* default */].hydrate(this.mDeliverables);
+            return __WEBPACK_IMPORTED_MODULE_5__models_deliverable__["a" /* default */].hydrate(this.mDeliverables);
         }
     }
 });

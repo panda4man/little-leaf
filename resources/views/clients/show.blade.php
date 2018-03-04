@@ -1,6 +1,6 @@
 @extends('layouts.account')
 
-@section('title', $client->name . ' | Clients | ')
+@section('title', $client->name . ' | ')
 
 @section('breadcrumbs')
     <v-breadcrumbs divider="/">

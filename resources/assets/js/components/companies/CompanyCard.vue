@@ -2,7 +2,7 @@
     <v-card class="company-card">
         <template v-if="company">
             <v-card-text>
-                <v-layout row>
+                <v-layout row wrap>
                     <v-flex xs12 sm4 md3>
                         <img width="100%" :src="company.photo ? company.photo : 'http://placehold.it/200x200'">
                     </v-flex>
