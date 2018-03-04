@@ -87,14 +87,23 @@
             {{-- Deliverables --}}
             <v-flex sm7 md8 lg9>
                 <v-layout row wrap>
-                    <v-flex xs12 sm12 md6 :key="d.id" v-for="d in hydratedDeliverables">
-                        <deliverable-details
-                                :deliverable="d"
-                                v-on:edit="openEditDeliverableModal"
-                                v-on:update="refreshDeliverable"
-                                v-on:delete="confirmDeleteDeliverable">
-                        </deliverable-details>
-                    </v-flex>
+                    <template v-if="hydratedDeliverables && hydratedDeliverables.length">
+                        <v-flex xs12 sm12 md6 :key="d.id" v-for="d in hydratedDeliverables">
+                            <deliverable-details
+                                    :deliverable="d"
+                                    v-on:edit="openEditDeliverableModal"
+                                    v-on:update="refreshDeliverable"
+                                    v-on:delete="confirmDeleteDeliverable">
+                            </deliverable-details>
+                        </v-flex>
+                    </template>
+                    <template v-else>
+                        <v-flex>
+                            <v-alert type="info" :value="true">
+                                You haven't created any deliverables yet. Click the green button below to get started.
+                            </v-alert>
+                        </v-flex>
+                    </template>
                 </v-layout>
             </v-flex>
             <v-btn color="success" fixed dark icon fab bottom right @click="openCreateDeliverableModal"><v-icon>add</v-icon></v-btn>
